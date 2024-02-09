@@ -1,2 +1,1 @@
-# ParkNet-
-ProjetoFinal do modulo POO 
+# ParkNet
