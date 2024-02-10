@@ -14,6 +14,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddScoped<FloorRepository>();
 builder.Services.AddScoped<LayoutGestorService>();
+builder.Services.AddScoped<ParkingSpaceRepository>();
+builder.Services.AddScoped<PlaceContructor>();
+builder.Services.AddScoped<ParkRepository>();
+builder.Services.AddScoped<GeneralRepository>();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));

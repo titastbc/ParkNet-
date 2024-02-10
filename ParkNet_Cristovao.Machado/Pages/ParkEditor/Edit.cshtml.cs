@@ -7,21 +7,31 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ParkNet_Cristovao.Machado.Data.Entities;
+using ParkNet_Cristovao.Machado.Data.Repositories;
+using ParkNet_Cristovao.Machado.Data.Services;
 
 namespace ParkNet_Cristovao.Machado.Pages.ParkEditor
 {
     public class EditModel : PageModel
     {
         private readonly ParkNet_Cristovao.Machado.Data.Entities.ApplicationDbContext _context;
-
-        public EditModel(ParkNet_Cristovao.Machado.Data.Entities.ApplicationDbContext context)
-        {
+        private readonly FloorRepository _FloorRepository;
+        private readonly LayoutGestorService _LayoutGestorService;
+        private readonly ParkRepository _parkrepository;
+        private readonly GeneralRepository _GeneralRepository;
+        public EditModel(ParkNet_Cristovao.Machado.Data.Entities.ApplicationDbContext context, FloorRepository floorRepository
+            , ParkRepository parkRepository, LayoutGestorService layoutGestorService, GeneralRepository generalRepository)
+        {   
+            _GeneralRepository = generalRepository;
+            _LayoutGestorService = layoutGestorService;
+            _parkrepository = parkRepository;
+            _FloorRepository = floorRepository;
             _context = context;
         }
 
         [BindProperty]
         public Park Park { get; set; } = default!;
-
+        public List<ParkingSpace> Spaces { get; set; } = default!;
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
@@ -29,7 +39,8 @@ namespace ParkNet_Cristovao.Machado.Pages.ParkEditor
                 return NotFound();
             }
 
-            var park =  await _context.Park.FirstOrDefaultAsync(m => m.Id == id);
+            var park =  await _parkrepository.GetParkByIdAsync(id.Value);
+            Floors = await _FloorRepository.GetFloorsAsync(id.Value);
             if (park == null)
             {
                 return NotFound();
@@ -37,6 +48,7 @@ namespace ParkNet_Cristovao.Machado.Pages.ParkEditor
             Park = park;
             return Page();
         }
+        public List<Floor> Floors { get; set; }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see https://aka.ms/RazorPagesCRUD.
@@ -46,31 +58,17 @@ namespace ParkNet_Cristovao.Machado.Pages.ParkEditor
             {
                 return Page();
             }
+            Floors = _LayoutGestorService.FloorBuilder(Park.Id, Park.Layout);
+            var parkingspacenames = _LayoutGestorService.GetNames(Park.Layout.Split("\r\n"));
+            var ids = _GeneralRepository._FloorRepository.GetFloorsId(Floors);
 
-            _context.Attach(Park).State = EntityState.Modified;
+            Spaces = _LayoutGestorService.GetPlaces(Park.Layout, ids, parkingspacenames);
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ParkExists(Park.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await _GeneralRepository.UpdateMultiEntities(Park, Park.Layout, Floors, Spaces);
+
 
             return RedirectToPage("./Index");
         }
 
-        private bool ParkExists(int id)
-        {
-            return _context.Park.Any(e => e.Id == id);
-        }
     }
 }

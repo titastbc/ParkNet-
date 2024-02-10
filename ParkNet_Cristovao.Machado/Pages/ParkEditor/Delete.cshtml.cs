@@ -6,15 +6,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using ParkNet_Cristovao.Machado.Data.Entities;
+using ParkNet_Cristovao.Machado.Data.Repositories;
 
 namespace ParkNet_Cristovao.Machado.Pages.ParkEditor
 {
     public class DeleteModel : PageModel
     {
         private readonly ParkNet_Cristovao.Machado.Data.Entities.ApplicationDbContext _context;
+        private readonly ParkRepository _parkRepository;
 
-        public DeleteModel(ParkNet_Cristovao.Machado.Data.Entities.ApplicationDbContext context)
+        public DeleteModel(ParkNet_Cristovao.Machado.Data.Entities.ApplicationDbContext context, ParkRepository parkRepository)
         {
+            _parkRepository = parkRepository;
             _context = context;
         }
 
@@ -48,13 +51,8 @@ namespace ParkNet_Cristovao.Machado.Pages.ParkEditor
                 return NotFound();
             }
 
-            var park = await _context.Park.FindAsync(id);
-            if (park != null)
-            {
-                Park = park;
-                _context.Park.Remove(Park);
-                await _context.SaveChangesAsync();
-            }
+         if(  await _parkRepository.DeletePark(id.Value) == null)
+                return NotFound();
 
             return RedirectToPage("./Index");
         }

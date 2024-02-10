@@ -13,14 +13,18 @@ namespace ParkNet_Cristovao.Machado.Pages.ParkEditor
 {
     public class CreateModel : PageModel
     {
-        private readonly ParkNet_Cristovao.Machado.Data.Entities.ApplicationDbContext _context;
+        private readonly ParkNet_Cristovao.Machado.Data.Entities.ApplicationDbContext _Context;
         private readonly FloorRepository _FloorRepository;
         private readonly LayoutGestorService _LayoutGestorService;
+        private readonly ParkingSpaceRepository _ParkingSpaceRepository;
+        private readonly ParkRepository _parkrepository;
+        private readonly GeneralRepository _GeneralRepository;
 
-        public CreateModel(ParkNet_Cristovao.Machado.Data.Entities.ApplicationDbContext context, FloorRepository floorRepository, LayoutGestorService layoutGestorService)
+        public CreateModel(ParkNet_Cristovao.Machado.Data.Entities.ApplicationDbContext context, LayoutGestorService layoutGestorService,
+             GeneralRepository generalRepository)
         {
-            _FloorRepository = floorRepository;
-            _context = context;
+            _GeneralRepository = generalRepository;
+            _Context = context;
             _LayoutGestorService = layoutGestorService;
         }
 
@@ -38,16 +42,15 @@ namespace ParkNet_Cristovao.Machado.Pages.ParkEditor
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-            _context.Park.Add(Park);
-            await _context.SaveChangesAsync();
+            //if (!ModelState.IsValid)
+            //{
+            //    return Page();
+            //}
+            var ParkingSpacesnames = _LayoutGestorService.GetNames(Layout.Split("\r\n"));
+            var ids = _GeneralRepository._FloorRepository.GetFloorsId(Floors);
             Floors = _LayoutGestorService.FloorBuilder(Park.Id, Layout);
-
-            await _FloorRepository.AddMultiFloor(Floors);
-
+            ParkingSpaces = _LayoutGestorService.GetPlaces(Layout, ids, ParkingSpacesnames);
+            await _GeneralRepository.AddMultiEntitiesasync(Park, Layout, Floors, ParkingSpaces);
             return RedirectToPage("./Index");
         }
     }

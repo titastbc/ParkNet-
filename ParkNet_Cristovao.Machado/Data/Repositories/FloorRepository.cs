@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NuGet.Packaging.Signing;
 using ParkNet_Cristovao.Machado.Data.Entities;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ParkNet_Cristovao.Machado.Data.Repositories
@@ -22,9 +24,9 @@ namespace ParkNet_Cristovao.Machado.Data.Repositories
         {
             return await _context.Floor.FirstOrDefaultAsync(f => f.Id == id);
         }
-        public async Task<IList<Floor>> GetFloorsAsync()
+        public async Task<List<Floor>> GetFloorsAsync(int parkid)
         {
-            return await _context.Floor.ToListAsync();
+            return await _context.Floor.Where(f => f.Id == parkid).ToListAsync();
         }
         public async Task<Floor> UpdateFloor(Floor floor)
         {
@@ -34,12 +36,25 @@ namespace ParkNet_Cristovao.Machado.Data.Repositories
         }
         public async Task<Floor> AddMultiFloor(List<Floor> floor)
         {
-            foreach (var f in floor)
+            _context.Floor.AddRange(floor);
+            return null;
+        }
+        public List<int> GetFloorsId(List<Floor> floors)
+        {
+            List<int> id = new List<int>();
+            foreach (var f in floors)
             {
-            await _context.Floor.AddAsync(f);
-            await _context.SaveChangesAsync();
-
+                id.Add(f.Id);
             }
+            return id;
+        }
+        ´public async Task<Floor> UpdateFloors(List<Floor> floors)
+        {
+            foreach (var f in floors)
+            {
+                _context.Floor.Attach(f).State = EntityState.Modified;
+            }
+            await _context.SaveChangesAsync();
             return null;
         }
     }

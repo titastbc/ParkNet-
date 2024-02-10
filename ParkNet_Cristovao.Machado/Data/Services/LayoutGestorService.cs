@@ -1,7 +1,9 @@
-﻿using ParkNet_Cristovao.Machado.Data.Entities;
+﻿using NuGet.Protocol.Core.Types;
+using ParkNet_Cristovao.Machado.Data.Entities;
 using ParkNet_Cristovao.Machado.Data.Migrations;
 using ParkNet_Cristovao.Machado.Data.Repositories;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ParkNet_Cristovao.Machado.Data.Services
@@ -9,8 +11,10 @@ namespace ParkNet_Cristovao.Machado.Data.Services
     public class LayoutGestorService
     {
         public FloorRepository _floorRepository;
-        public LayoutGestorService(FloorRepository floorRepository)
+        private readonly PlaceContructor PlaceContructor;
+        public LayoutGestorService(FloorRepository floorRepository, PlaceContructor _placeCons)
         {
+            PlaceContructor = _placeCons;
             _floorRepository = floorRepository;
         }
         public List<Floor> FloorBuilder(int parkid, string layout)
@@ -47,21 +51,27 @@ namespace ParkNet_Cristovao.Machado.Data.Services
             return list;
 
         }
-        public List<ParkingSpace> GetPlaces(string layout, int floorid)
+        public List<ParkingSpace> GetPlaces(string layout, List<int> floorids, List<string> names)
         {
             var lines = layout.Split("\r\n");
             List<ParkingSpace> list = new List<ParkingSpace>();
-            List<string> names = GetNames(lines);
-            char[] Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
+            int idindex = 0;
+            int countlugar = 0;
             for (int i = 0; i < lines.Length; i++)
             {
+                if (lines[i] == " ")
+                {
+                    idindex++;
+                    continue;
+                }
                 for (int j = 0; j < lines[i].Length; j++)
                 {
                     if (lines[i][j] == 'C' || lines[i][j] == 'M')
                     {
                         ParkingSpace parkingSpace = new ParkingSpace();
-                        parkingSpace.FloorID = floorid;
-                        parkingSpace.Name = names[j];
+                        parkingSpace.FloorID = floorids[idindex];
+                        parkingSpace.Name = names[countlugar];
+                        countlugar++;
                         list.Add(parkingSpace);
                     }
                 }
@@ -69,31 +79,26 @@ namespace ParkNet_Cristovao.Machado.Data.Services
             return list;
         }
 
-        public char[,] LayoutMatrizBuilder(string layout)
+        public string[,] LayoutMatrizBuilder(List<Floor> floors)
         {
-            var lines = layout.Split("\r\n");
-            var lenght = StringHelper.MaxLenght(lines);
-            char[,] matriz = new char[lines.Length, lenght];
-            for (int i = 0; i < lines.Length; i++)
+            int maxlenght = StringHelper.MaxLenghtFloors(floors);
+            int maxwidht = StringHelper.MaxWidhtFloors(floors);
+            string[,] matriz = new string[maxwidht, maxlenght];
+            int countwidht = 0;
+            foreach (var floor in floors)
             {
-                for (int j = 0; j < lines[i].Length; j++)
+                var lines = floor.Layout.Split("\n");
+                for (int i = 0; i < lines.Length; i++)
                 {
-                    matriz[i, j] = lines[i][j];
+                    for (int j = 0; j < lines[i].Length; j++)
+                    {
+                        matriz[countwidht, j] = lines[i][j].ToString();
+                    }
+                    countwidht++;
                 }
             }
             return matriz;
 
-        }
-        public void PrintMatriz(char[,] matriz)
-        {
-            for (int i = 0; i < matriz.GetLength(0); i++)
-            {
-                for (int j = 0; j < matriz.GetLength(1); j++)
-                {
-                    System.Console.Write(matriz[i, j]);
-                }
-                System.Console.WriteLine();
-            }
         }
         public List<string> GetNames(string[] strs)
         {
@@ -101,27 +106,47 @@ namespace ParkNet_Cristovao.Machado.Data.Services
             List<string> list = new List<string>();
             int index = 0;
             int count = 1;
+            int countlugar = 1;
             string letters = "";
             for (int i = 0; i < strs.Length; i++)
             {
+                if (strs[i] == " ")
+                    continue;
                 if (i == 27)
                 {
                     count++;
                     index = 0;
                 }
-                for (int k = 0; k < count; k++)
+                for (int j = 0; j < strs[i].Length; j++)
                 {
-                    letters += Alphabet[index];
-                    for (int j = 0; j < strs[i].Length; j++)
+                    letters = "";
+                    for (int k = 0; k < count; k++)
                     {
-                        if (strs[i][j] == 'C' || strs[i][j] == 'M')
-                        list.Add(letters + (j + 1));
+                        letters += Alphabet[index];
+                    }
+                    if (strs[i][j] == 'C' || strs[i][j] == 'M')
+                    {
+                        list.Add(letters + countlugar);
+                        countlugar++;
+
                     }
                 }
                 index++;
+                countlugar = 1;
             }
-                return list;
+            return list;
         }
+        public string[,] LayouFromBd(int parkid)
+        {
+            var Floor = _floorRepository._context.Floor.Where(f => f.ParkId == parkid).ToList();
+           
+            string[,] matriz = LayoutMatrizBuilder(Floor);
+             int[] floorids = _floorRepository.GetFloorsId(Floor).ToArray();
+                matriz = PlaceContructor.PlaceBuilder(matriz, floorids);
+            return matriz;
+        }
+
+
     }
 
 }
