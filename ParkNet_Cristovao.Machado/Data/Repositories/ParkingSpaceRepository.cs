@@ -21,16 +21,14 @@ namespace ParkNet_Cristovao.Machado.Data.Repositories
         }
         public string[] GetParkingSpaceNameByFloorId(int[] floorid)
         {
-            int length = 0;
             List<ParkingSpace> parkingSpaces = new List<ParkingSpace>();
             List<ParkingSpace> parkingSpaces2 = new List<ParkingSpace>();
             foreach (var id in floorid)
             {
                parkingSpaces = _context.ParkingSpace.Where(p => p.FloorID == id).ToList();
                 parkingSpaces2.AddRange(parkingSpaces);
-                length += parkingSpaces.Count();
             }
-                string[] names = new string[length];
+                string[] names = new string[parkingSpaces2.Count];
             for(int i = 0; i < names.Length; i++)
             {
 

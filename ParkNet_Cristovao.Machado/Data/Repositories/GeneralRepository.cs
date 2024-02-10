@@ -27,7 +27,7 @@ namespace ParkNet_Cristovao.Machado.Data.Repositories
 
         public async Task<Park> UpdateMultiEntities(Park park, string layout, List<Floor> floors, List<ParkingSpace> parkings)
         {
-            _parkrepository.UpdatePark(park);
+            _parkrepository.UpdateParkAsync(park);
             await _FloorRepository.UpdateFloors(floors);
             await _ParkingSpaceRepository.Update(parkings);
             return null;

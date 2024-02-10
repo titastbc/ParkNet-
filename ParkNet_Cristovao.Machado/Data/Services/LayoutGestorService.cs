@@ -2,6 +2,7 @@
 using ParkNet_Cristovao.Machado.Data.Entities;
 using ParkNet_Cristovao.Machado.Data.Migrations;
 using ParkNet_Cristovao.Machado.Data.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,11 +12,11 @@ namespace ParkNet_Cristovao.Machado.Data.Services
     public class LayoutGestorService
     {
         public FloorRepository _floorRepository;
-        private readonly PlaceContructor PlaceContructor;
-        public LayoutGestorService(FloorRepository floorRepository, PlaceContructor _placeCons)
+        private readonly ParkingSpaceRepository _ParkingSpaceRepository;
+        public LayoutGestorService(FloorRepository floorRepository, ParkingSpaceRepository parkingSpaceRepository)
         {
-            PlaceContructor = _placeCons;
             _floorRepository = floorRepository;
+            _ParkingSpaceRepository = parkingSpaceRepository;
         }
         public List<Floor> FloorBuilder(int parkid, string layout)
         {
@@ -142,10 +143,28 @@ namespace ParkNet_Cristovao.Machado.Data.Services
            
             string[,] matriz = LayoutMatrizBuilder(Floor);
              int[] floorids = _floorRepository.GetFloorsId(Floor).ToArray();
-                matriz = PlaceContructor.PlaceBuilder(matriz, floorids);
+                matriz = PlaceNamer(matriz, floorids);
             return matriz;
         }
+        public string[,] PlaceNamer(string[,] matriz, int[] floorids)
+        {
 
+            var places = _ParkingSpaceRepository.GetParkingSpaceNameByFloorId(floorids);
+            int count = 0;
+            for (int i = 0; i < matriz.GetLength(0); i++)
+            {
+                for (int j = 0; j < matriz.GetLength(1); j++)
+                {
+                    if (matriz[i, j] == "M" || matriz[i, j] == "C")
+                    {
+                        matriz[i, j] = places[count] + " ";
+                        count++;
+                    }
+                }
+
+            }
+            return matriz;
+        }
 
     }
 

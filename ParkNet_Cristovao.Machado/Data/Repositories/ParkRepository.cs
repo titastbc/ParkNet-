@@ -40,7 +40,7 @@ namespace ParkNet_Cristovao.Machado.Data.Repositories
             else return null;
             return park;
         }
-        public async Task<Park> UpdatePark(Park park)
+        public async Task<Park> UpdateParkAsync(Park park)
         {
             _context.Park.Attach(park).State = EntityState.Modified;
             await _context.SaveChangesAsync();

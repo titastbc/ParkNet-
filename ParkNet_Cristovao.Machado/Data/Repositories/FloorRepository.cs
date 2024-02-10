@@ -39,6 +39,16 @@ namespace ParkNet_Cristovao.Machado.Data.Repositories
             _context.Floor.AddRange(floor);
             return null;
         }
+        public List<int> GetFloorByParkId(int id)
+        {
+          var floors =  _context.Floor.Where(f => f.ParkId == id).ToList();
+            List<int> ids = new List<int>();
+            foreach (var f in floors)
+            {
+                ids.Add(f.Id);
+            }
+            return ids;
+        }
         public List<int> GetFloorsId(List<Floor> floors)
         {
             List<int> id = new List<int>();
@@ -48,7 +58,7 @@ namespace ParkNet_Cristovao.Machado.Data.Repositories
             }
             return id;
         }
-        ´public async Task<Floor> UpdateFloors(List<Floor> floors)
+        public async Task<Floor> UpdateFloors(List<Floor> floors)
         {
             foreach (var f in floors)
             {

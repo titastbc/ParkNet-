@@ -19,13 +19,9 @@ namespace ParkNet_Cristovao.Machado.Pages.ParkEditor
         private readonly LayoutGestorService _LayoutGestorService;
         private readonly ParkRepository _parkrepository;
         private readonly GeneralRepository _GeneralRepository;
-        public EditModel(ParkNet_Cristovao.Machado.Data.Entities.ApplicationDbContext context, FloorRepository floorRepository
-            , ParkRepository parkRepository, LayoutGestorService layoutGestorService, GeneralRepository generalRepository)
+        public EditModel(ParkNet_Cristovao.Machado.Data.Entities.ApplicationDbContext context , ParkRepository parkRepository)
         {   
-            _GeneralRepository = generalRepository;
-            _LayoutGestorService = layoutGestorService;
             _parkrepository = parkRepository;
-            _FloorRepository = floorRepository;
             _context = context;
         }
 
@@ -40,7 +36,6 @@ namespace ParkNet_Cristovao.Machado.Pages.ParkEditor
             }
 
             var park =  await _parkrepository.GetParkByIdAsync(id.Value);
-            Floors = await _FloorRepository.GetFloorsAsync(id.Value);
             if (park == null)
             {
                 return NotFound();
@@ -48,7 +43,6 @@ namespace ParkNet_Cristovao.Machado.Pages.ParkEditor
             Park = park;
             return Page();
         }
-        public List<Floor> Floors { get; set; }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see https://aka.ms/RazorPagesCRUD.
@@ -58,13 +52,7 @@ namespace ParkNet_Cristovao.Machado.Pages.ParkEditor
             {
                 return Page();
             }
-            Floors = _LayoutGestorService.FloorBuilder(Park.Id, Park.Layout);
-            var parkingspacenames = _LayoutGestorService.GetNames(Park.Layout.Split("\r\n"));
-            var ids = _GeneralRepository._FloorRepository.GetFloorsId(Floors);
-
-            Spaces = _LayoutGestorService.GetPlaces(Park.Layout, ids, parkingspacenames);
-
-            await _GeneralRepository.UpdateMultiEntities(Park, Park.Layout, Floors, Spaces);
+            await _parkrepository.UpdateParkAsync(Park);
 
 
             return RedirectToPage("./Index");
