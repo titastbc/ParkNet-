@@ -46,11 +46,13 @@ namespace ParkNet_Cristovao.Machado.Pages.ParkEditor
             //{
             //    return Page();
             //}
-            var ParkingSpacesnames = _LayoutGestorService.GetNames(Layout.Split("\r\n"));
-            var ids = _GeneralRepository._FloorRepository.GetFloorsId(Floors);
+            await _GeneralRepository._parkrepository.AddPark(Park, Layout);
             Floors = _LayoutGestorService.FloorBuilder(Park.Id, Layout);
+            await _GeneralRepository._FloorRepository.AddMultiFloorAsync(Floors);
+            var ids = _GeneralRepository._FloorRepository.GetFloorIdByParkId(Park.Id);
+            var ParkingSpacesnames = _LayoutGestorService.GetNames(Layout.Split("\r\n"));
             ParkingSpaces = _LayoutGestorService.GetPlaces(Layout, ids, ParkingSpacesnames);
-            await _GeneralRepository.AddMultiEntitiesasync(Park, Layout, Floors, ParkingSpaces);
+            _GeneralRepository._ParkingSpaceRepository.AddParkingSpaces(ParkingSpaces);
             return RedirectToPage("./Index");
         }
     }

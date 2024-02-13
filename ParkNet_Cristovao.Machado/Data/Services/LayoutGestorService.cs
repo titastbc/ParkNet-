@@ -22,7 +22,6 @@ namespace ParkNet_Cristovao.Machado.Data.Services
         {
             List<string> layouts = LayoutSpliter(layout);
             List<Floor> list = new List<Floor>();
-            new List<ParkingSpace>();
             for (int i = 0; i < layouts.Count; i++)
             {
                 Floor floor = new Floor();
@@ -67,11 +66,21 @@ namespace ParkNet_Cristovao.Machado.Data.Services
                 }
                 for (int j = 0; j < lines[i].Length; j++)
                 {
-                    if (lines[i][j] == 'C' || lines[i][j] == 'M')
+                    if (lines[i][j] == 'M')
                     {
                         ParkingSpace parkingSpace = new ParkingSpace();
                         parkingSpace.FloorID = floorids[idindex];
                         parkingSpace.Name = names[countlugar];
+                        parkingSpace.Type = "Motorcycle";
+                        countlugar++;
+                        list.Add(parkingSpace);
+                    }
+                    else if (lines[i][j] == 'C')
+                    {
+                        ParkingSpace parkingSpace = new ParkingSpace();
+                        parkingSpace.FloorID = floorids[idindex];
+                        parkingSpace.Name = names[countlugar];
+                        parkingSpace.Type = "Car";
                         countlugar++;
                         list.Add(parkingSpace);
                     }
@@ -140,10 +149,10 @@ namespace ParkNet_Cristovao.Machado.Data.Services
         public string[,] LayouFromBd(int parkid)
         {
             var Floor = _floorRepository._context.Floor.Where(f => f.ParkId == parkid).ToList();
-           
-            string[,] matriz = LayoutMatrizBuilder(Floor);
-             int[] floorids = _floorRepository.GetFloorsId(Floor).ToArray();
-                matriz = PlaceNamer(matriz, floorids);
+
+            string[,] matriz =  LayoutMatrizBuilder(Floor);
+            int[] floorids = _floorRepository.GetFloorsId(Floor).ToArray();
+            matriz = PlaceNamer(matriz, floorids);
             return matriz;
         }
         public string[,] PlaceNamer(string[,] matriz, int[] floorids)
@@ -165,7 +174,20 @@ namespace ParkNet_Cristovao.Machado.Data.Services
             }
             return matriz;
         }
-
+        //public string[,] MatrizWithFreeSpaces(List<ParkingSpace> Free, string[,] matriz)
+        //{
+        //    for(int i = 0; i < matriz.GetLength(0); i++)
+        //    {
+        //        for(int j = 0; j < matriz.GetLength(1); j++)
+        //        {
+        //            foreach (var f in Free)
+        //            {
+        //                if (matriz[i,j] == f.Name)
+        //                    matriz[i,j]
+        //            }
+        //        }
+        //    }
+        //}
     }
 
 }

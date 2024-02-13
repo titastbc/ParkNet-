@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using ParkNet_Cristovao.Machado.Data.Models;
 
 namespace ParkNet_Cristovao.Machado.Data.Entities
 {
@@ -14,6 +15,9 @@ namespace ParkNet_Cristovao.Machado.Data.Entities
         public DbSet<TariffTicket> TariffTickets { get; set; }
         public DbSet<Transactions> Transactions { get; set; }
         public DbSet<Ticket> Ticket { get; set; }
+        public object Customer { get; internal set; }
+       public DbSet<PermitRequestModel> PermitRequestModel { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {

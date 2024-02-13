@@ -5,7 +5,19 @@
 }
 
 
-<div class="text-center">
-    <h1 class="display-4">ParkNet</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@if(Model.Parks.Count < 1)
+{
+    <div class="text-center">
+        <h1 class="display-4">Welcome, Admin! Please Config a Park! </h1>
+    </div>
+    <div>
+        <a asp-page="/ParkEditor/Create">ParkCreator</a>
+    </div>
+    
+}
+else {
+    <div class="text-center">
+        <h1 class="display-4">ParkNet</h1>
+    </div>
+}
+

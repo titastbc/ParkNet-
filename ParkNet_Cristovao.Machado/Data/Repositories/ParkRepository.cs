@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ParkNet_Cristovao.Machado.Data.Entities;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -45,6 +46,10 @@ namespace ParkNet_Cristovao.Machado.Data.Repositories
             _context.Park.Attach(park).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return park;
+        }
+        public async Task<List<Park>> GetParks()
+        {
+            return await _context.Park.ToListAsync();
         }
     }
 }

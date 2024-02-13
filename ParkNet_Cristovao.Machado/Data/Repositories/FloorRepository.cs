@@ -34,12 +34,16 @@ namespace ParkNet_Cristovao.Machado.Data.Repositories
             await _context.SaveChangesAsync();
             return floor;
         }
-        public async Task<Floor> AddMultiFloor(List<Floor> floor)
+        public async Task<Floor> AddMultiFloorAsync(List<Floor> floor)
         {
-            _context.Floor.AddRange(floor);
-            return null;
+            foreach (var f in floor)
+            {
+               await _context.Floor.AddAsync(f);
+            }
+            await _context.SaveChangesAsync();
+            return floor[0];
         }
-        public List<int> GetFloorByParkId(int id)
+        public List<int> GetFloorIdByParkId(int id)
         {
           var floors =  _context.Floor.Where(f => f.ParkId == id).ToList();
             List<int> ids = new List<int>();

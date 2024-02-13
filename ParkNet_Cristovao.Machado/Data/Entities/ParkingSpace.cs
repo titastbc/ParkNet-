@@ -9,5 +9,6 @@ namespace ParkNet_Cristovao.Machado.Data.Entities
         public string Name { get; set; }
         public Floor Floor { get; set; }
         public int FloorID { get; set; }
+        public string Type { get; set; }
     }
 }

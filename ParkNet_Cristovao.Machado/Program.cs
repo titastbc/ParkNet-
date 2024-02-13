@@ -17,6 +17,11 @@ builder.Services.AddScoped<LayoutGestorService>();
 builder.Services.AddScoped<ParkingSpaceRepository>();
 builder.Services.AddScoped<ParkRepository>();
 builder.Services.AddScoped<GeneralRepository>();
+builder.Services.AddScoped<VehicleRepository>();
+builder.Services.AddScoped<Checker>();
+builder.Services.AddScoped<TariffPermitRepository>();
+builder.Services.AddScoped<InicialConfigurator>();
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));

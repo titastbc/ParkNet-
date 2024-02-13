@@ -36,10 +36,10 @@ namespace ParkNet_Cristovao.Machado.Pages.ParkEditor
             }
             var park = await _context.Park.FirstOrDefaultAsync(m => m.Id == id);
             var names = _layoutGestorService.GetNames(park.Layout.Split("\n"));
-            var ids =  _floorRepository.GetFloorByParkId(park.Id);
+            var ids =  _floorRepository.GetFloorIdByParkId(park.Id);
             Floors = _layoutGestorService.FloorBuilder(park.Id, park.Layout);
-            Layout = _layoutGestorService.LayoutMatrizBuilder(Floors);
-            Layout = _layoutGestorService.PlaceNamer(Layout, ids.ToArray());
+            Layout = _layoutGestorService.LayouFromBd(park.Id);
+
             if (park == null)
             {
                 return NotFound();

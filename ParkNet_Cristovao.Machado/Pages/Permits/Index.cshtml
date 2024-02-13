@@ -1,0 +1,51 @@
+﻿@page
+@using ParkNet_Cristovao.Machado.Data.Entities
+@model ParkNet_Cristovao.Machado.Pages.Permits.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+@if (Model.Permit.Count == 0)
+{
+    <H1> You donte have any active permits</H1>
+
+}
+else {
+
+<h1>Uour active Permit´s</h1>
+};
+
+<p>
+    <a asp-page="Create">Create a new Permit</a>
+</p>
+<table class="table">
+    <tbody>
+        @foreach (var item in Model.Permit)
+        {
+            if (item.EndDate < DateTime.Now)
+            {
+                continue;
+            }
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ParkingSpaceId, item.EndDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ParkingSpaceId, item.EndDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ParkingSpaceId, item.EndDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ParkingSpaceId, item.EndDate)
+                </td>
+                <td>
+                    <a asp-page="./Details" asp-route-id="@item.Id">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

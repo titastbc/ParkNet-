@@ -20,7 +20,7 @@ namespace ParkNet_Cristovao.Machado.Data.Repositories
         public async Task<Park> AddMultiEntitiesasync(Park park, string layout, List<Floor> floors, List<ParkingSpace> parkingSpaces)
         {
             _ParkingSpaceRepository.AddParkingSpaces(parkingSpaces);
-            await _FloorRepository.AddMultiFloor(floors);
+            await _FloorRepository.AddMultiFloorAsync(floors);
             await _parkrepository.AddPark(park, layout);
             return null;
         }
