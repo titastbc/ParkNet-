@@ -1,5 +1,5 @@
 ﻿@page
-@model ParkNet_Cristovao.Machado.Pages.Permits.EditModel
+@model ParkNet_Cristovao.Machado.Pages.PermitRequest.EditModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -7,32 +7,32 @@
 
 <h1>Edit</h1>
 
-<h4>Permit</h4>
+<h4>PermitRequestModel</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Permit.Id" />
+            <input type="hidden" asp-for="PermitRequestModel.Id" />
             <div class="form-group">
-                <label asp-for="Permit.VehicleId" class="control-label"></label>
-                <select asp-for="Permit.VehicleId" class="form-control" asp-items="ViewBag.VehicleId"></select>
-                <span asp-validation-for="Permit.VehicleId" class="text-danger"></span>
+                <label asp-for="PermitRequestModel.VehicleId" class="control-label"></label>
+                <input asp-for="PermitRequestModel.VehicleId" class="form-control" />
+                <span asp-validation-for="PermitRequestModel.VehicleId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Permit.ParkingSpaceId" class="control-label"></label>
-                <select asp-for="Permit.ParkingSpaceId" class="form-control" asp-items="ViewBag.ParkingSpaceId"></select>
-                <span asp-validation-for="Permit.ParkingSpaceId" class="text-danger"></span>
+                <label asp-for="PermitRequestModel.Period" class="control-label"></label>
+                <input asp-for="PermitRequestModel.Period" class="form-control" />
+                <span asp-validation-for="PermitRequestModel.Period" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Permit.StartDate" class="control-label"></label>
-                <input asp-for="Permit.StartDate" class="form-control" />
-                <span asp-validation-for="Permit.StartDate" class="text-danger"></span>
+                <label asp-for="PermitRequestModel.Parkid" class="control-label"></label>
+                <input asp-for="PermitRequestModel.Parkid" class="form-control" />
+                <span asp-validation-for="PermitRequestModel.Parkid" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Permit.EndDate" class="control-label"></label>
-                <input asp-for="Permit.EndDate" class="form-control" />
-                <span asp-validation-for="Permit.EndDate" class="text-danger"></span>
+                <label asp-for="PermitRequestModel.Userid" class="control-label"></label>
+                <input asp-for="PermitRequestModel.Userid" class="form-control" />
+                <span asp-validation-for="PermitRequestModel.Userid" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

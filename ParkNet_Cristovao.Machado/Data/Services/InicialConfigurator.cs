@@ -13,10 +13,10 @@ namespace ParkNet_Cristovao.Machado.Data.Services
         public void TariffPermitInicialConfig()
         {
             _Context.Database.EnsureCreated();
-            _Context.TariffPermits.Add(new TariffPermit { Period = 1, Price = 1 });
-            _Context.TariffPermits.Add(new TariffPermit { Period = 3, Price = 3 });
-            _Context.TariffPermits.Add(new TariffPermit { Period = 6, Price = 6 });
-            _Context.TariffPermits.Add(new TariffPermit { Period = 12, Price = 12 });
+            _Context.TariffPermits.Add(new TariffPermit { Period = 1, Price = 1, Name = "Monthly" });
+            _Context.TariffPermits.Add(new TariffPermit { Period = 3, Price = 3, Name = "TriMonthly" });
+            _Context.TariffPermits.Add(new TariffPermit { Period = 6, Price = 6, Name = "Biannual" });
+            _Context.TariffPermits.Add(new TariffPermit { Period = 12, Price = 12, Name = "Annual" });
             _Context.SaveChanges();
         }
     }

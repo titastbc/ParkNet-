@@ -7,8 +7,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ParkNet_Cristovao.Machado.Data.Entities;
+using ParkNet_Cristovao.Machado.Data.Models;
 
-namespace ParkNet_Cristovao.Machado.Pages.Permits
+namespace ParkNet_Cristovao.Machado.Pages.PermitRequest
 {
     public class EditModel : PageModel
     {
@@ -20,7 +21,7 @@ namespace ParkNet_Cristovao.Machado.Pages.Permits
         }
 
         [BindProperty]
-        public Permit Permit { get; set; } = default!;
+        public PermitRequestModel PermitRequestModel { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -29,14 +30,12 @@ namespace ParkNet_Cristovao.Machado.Pages.Permits
                 return NotFound();
             }
 
-            var permit =  await _context.Permit.FirstOrDefaultAsync(m => m.Id == id);
-            if (permit == null)
+            var permitrequestmodel =  await _context.PermitRequestModel.FirstOrDefaultAsync(m => m.Id == id);
+            if (permitrequestmodel == null)
             {
                 return NotFound();
             }
-            Permit = permit;
-           ViewData["ParkingSpaceId"] = new SelectList(_context.ParkingSpace, "Id", "Id");
-           ViewData["VehicleId"] = new SelectList(_context.Veihicle, "Id", "Id");
+            PermitRequestModel = permitrequestmodel;
             return Page();
         }
 
@@ -49,7 +48,7 @@ namespace ParkNet_Cristovao.Machado.Pages.Permits
                 return Page();
             }
 
-            _context.Attach(Permit).State = EntityState.Modified;
+            _context.Attach(PermitRequestModel).State = EntityState.Modified;
 
             try
             {
@@ -57,7 +56,7 @@ namespace ParkNet_Cristovao.Machado.Pages.Permits
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PermitExists(Permit.Id))
+                if (!PermitRequestModelExists(PermitRequestModel.Id))
                 {
                     return NotFound();
                 }
@@ -70,9 +69,9 @@ namespace ParkNet_Cristovao.Machado.Pages.Permits
             return RedirectToPage("./Index");
         }
 
-        private bool PermitExists(int id)
+        private bool PermitRequestModelExists(int id)
         {
-            return _context.Permit.Any(e => e.Id == id);
+            return _context.PermitRequestModel.Any(e => e.Id == id);
         }
     }
 }

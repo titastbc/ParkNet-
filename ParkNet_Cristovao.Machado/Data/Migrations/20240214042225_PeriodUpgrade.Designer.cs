@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ParkNet_Cristovao.Machado.Data.Entities;
 
@@ -11,9 +12,11 @@ using ParkNet_Cristovao.Machado.Data.Entities;
 namespace ParkNet_Cristovao.Machado.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240214042225_PeriodUpgrade")]
+    partial class PeriodUpgrade
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -356,6 +359,9 @@ namespace ParkNet_Cristovao.Machado.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Period")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PeriodInMonths")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Price")

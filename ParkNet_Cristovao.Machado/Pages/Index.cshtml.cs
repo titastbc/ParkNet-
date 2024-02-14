@@ -33,7 +33,7 @@ namespace ParkNet_Cristovao.Machado.Pages
         {
             Parks = await _parkRepository.GetParks();
             TariffPermit = _tariffPermitRepository.GetAll();
-            if(TariffPermit.Count ==0 || Parks.Count == 0)
+            if(TariffPermit.Count ==0)
             {
                 _inicialConfigurator.TariffPermitInicialConfig();
             }

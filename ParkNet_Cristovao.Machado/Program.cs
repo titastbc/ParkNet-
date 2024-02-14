@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ParkNet_Cristovao.Machado.Data;
 using ParkNet_Cristovao.Machado.Data.Entities;
 using ParkNet_Cristovao.Machado.Data.Repositories;
 using ParkNet_Cristovao.Machado.Data.Services;
@@ -21,6 +22,7 @@ builder.Services.AddScoped<VehicleRepository>();
 builder.Services.AddScoped<Checker>();
 builder.Services.AddScoped<TariffPermitRepository>();
 builder.Services.AddScoped<InicialConfigurator>();
+builder.Services.AddScoped<StringHelper>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>

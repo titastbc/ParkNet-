@@ -13,10 +13,12 @@ namespace ParkNet_Cristovao.Machado.Data.Services
     {
         public FloorRepository _floorRepository;
         private readonly ParkingSpaceRepository _ParkingSpaceRepository;
-        public LayoutGestorService(FloorRepository floorRepository, ParkingSpaceRepository parkingSpaceRepository)
+        private readonly Checker _checker;
+        public LayoutGestorService(FloorRepository floorRepository, ParkingSpaceRepository parkingSpaceRepository, Checker checker)
         {
             _floorRepository = floorRepository;
             _ParkingSpaceRepository = parkingSpaceRepository;
+            _checker = checker;
         }
         public List<Floor> FloorBuilder(int parkid, string layout)
         {
@@ -149,10 +151,11 @@ namespace ParkNet_Cristovao.Machado.Data.Services
         public string[,] LayouFromBd(int parkid)
         {
             var Floor = _floorRepository._context.Floor.Where(f => f.ParkId == parkid).ToList();
-
+            
             string[,] matriz =  LayoutMatrizBuilder(Floor);
             int[] floorids = _floorRepository.GetFloorsId(Floor).ToArray();
             matriz = PlaceNamer(matriz, floorids);
+
             return matriz;
         }
         public string[,] PlaceNamer(string[,] matriz, int[] floorids)
@@ -174,20 +177,23 @@ namespace ParkNet_Cristovao.Machado.Data.Services
             }
             return matriz;
         }
-        //public string[,] MatrizWithFreeSpaces(List<ParkingSpace> Free, string[,] matriz)
-        //{
-        //    for(int i = 0; i < matriz.GetLength(0); i++)
-        //    {
-        //        for(int j = 0; j < matriz.GetLength(1); j++)
-        //        {
-        //            foreach (var f in Free)
-        //            {
-        //                if (matriz[i,j] == f.Name)
-        //                    matriz[i,j]
-        //            }
-        //        }
-        //    }
-        //}
+        public string[,] LayouFromBdWithFreeSpaces(int parkid, Vehicle vehicle)
+        {
+            var Floor = _floorRepository._context.Floor.Where(f => f.ParkId == parkid).ToList();
+
+            string[,] matriz = LayoutMatrizBuilder(Floor);
+            int[] floorids = _floorRepository.GetFloorsId(Floor).ToArray();
+            List<ParkingSpace> places = new List<ParkingSpace>();
+            foreach (var floor in Floor)
+            {
+                places.AddRange( _floorRepository._context.ParkingSpace.Where(p => p.FloorID == floor.Id).ToList());
+            }
+           places = _checker.FreePlacesChekcer(Floor, vehicle);
+            matriz = PlaceNamer(matriz, floorids);
+            matriz = _checker.MatrizCheked(matriz, places);
+
+            return matriz;
+        }
     }
 
 }

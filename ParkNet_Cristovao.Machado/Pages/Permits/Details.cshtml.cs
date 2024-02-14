@@ -6,8 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using ParkNet_Cristovao.Machado.Data.Entities;
+using ParkNet_Cristovao.Machado.Data.Models;
 
-namespace ParkNet_Cristovao.Machado.Pages.Permits
+namespace ParkNet_Cristovao.Machado.Pages.PermitRequest
 {
     public class DetailsModel : PageModel
     {
@@ -18,7 +19,7 @@ namespace ParkNet_Cristovao.Machado.Pages.Permits
             _context = context;
         }
 
-        public Permit Permit { get; set; } = default!;
+        public PermitRequestModel PermitRequestModel { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -27,14 +28,14 @@ namespace ParkNet_Cristovao.Machado.Pages.Permits
                 return NotFound();
             }
 
-            var permit = await _context.Permit.FirstOrDefaultAsync(m => m.Id == id);
-            if (permit == null)
+            var permitrequestmodel = await _context.PermitRequestModel.FirstOrDefaultAsync(m => m.Id == id);
+            if (permitrequestmodel == null)
             {
                 return NotFound();
             }
             else
             {
-                Permit = permit;
+                PermitRequestModel = permitrequestmodel;
             }
             return Page();
         }

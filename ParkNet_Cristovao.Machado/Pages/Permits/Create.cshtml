@@ -1,40 +1,42 @@
 ﻿@page
-@model ParkNet_Cristovao.Machado.Pages.Permits.CreateModel
+@model ParkNet_Cristovao.Machado.Pages.PermitRequest.CreateModel
 
 @{
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1>Step 1/2</h1>
 
-<h4>Permit</h4>
+<h4>Permit Request</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Permit.VehicleId" class="control-label"></label>
-                <select asp-for="Permit.VehicleId" class ="form-control" asp-items="ViewBag.Vehicles"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Permit" class="control-label"></label>
-                <select asp-for="Permit.ParkingSpaceId" class ="form-control" asp-items="ViewBag.Parks"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Permit.StartDate" class="control-label"></label>
-                <input asp-for="Permit.StartDate" class="form-control" />
-                <span asp-validation-for="Permit.StartDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Permit.EndDate" class="control-label"></label>
-                <input asp-for="Permit.EndDate" class="form-control" />
-                <span asp-validation-for="Permit.EndDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+<form method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="form-group">
+        <label asp-for="PermitRequestModel.VehicleId" class="control-label">Choose you vehicle</label>
+        <select asp-for="PermitRequestModel.VehicleId" class="form-control" asp-items="ViewBag.Vehicles"></select>
+        <span asp-validation-for="PermitRequestModel.VehicleId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PermitRequestModel.Period" class="control-label">Type of subscription</label>
+        <select asp-for="PermitRequestModel.Period" class="form-control" asp-items="ViewBag.Periods"></select>
+        <span asp-validation-for="PermitRequestModel.Period" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PermitRequestModel.Parkid" class="control-label">Choose a Park</label>
+        <select asp-for="PermitRequestModel.Parkid" class="form-control" asp-items="ViewBag.Parks"></select>
+        <span asp-validation-for="PermitRequestModel.Parkid" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+</form>
+
     </div>
 </div>
 
@@ -43,5 +45,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

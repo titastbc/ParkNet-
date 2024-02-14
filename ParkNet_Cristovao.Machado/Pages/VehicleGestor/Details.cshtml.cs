@@ -27,7 +27,7 @@ namespace ParkNet_Cristovao.Machado.Pages.VehicleGestor
                 return NotFound();
             }
 
-            var vehicle = await _context.Veihicle.FirstOrDefaultAsync(m => m.Id == id);
+            var vehicle = await _context.Vehicle.FirstOrDefaultAsync(m => m.Id == id);
             if (vehicle == null)
             {
                 return NotFound();

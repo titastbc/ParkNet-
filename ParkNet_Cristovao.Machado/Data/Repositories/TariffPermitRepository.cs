@@ -15,7 +15,7 @@ namespace ParkNet_Cristovao.Machado.Data.Repositories
 
         public async Task<TariffPermit> Addasync(TariffPermit tariffPermit)
         {
-           await _context.TariffPermits.AddAsync(tariffPermit);
+            await _context.TariffPermits.AddAsync(tariffPermit);
             _context.SaveChanges();
             return tariffPermit;
         }
@@ -41,5 +41,6 @@ namespace ParkNet_Cristovao.Machado.Data.Repositories
         {
             return _context.TariffPermits.ToList();
         }
+
     }
 }

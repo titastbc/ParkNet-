@@ -16,22 +16,22 @@ namespace ParkNet_Cristovao.Machado.Data.Repositories
         }
         public async Task<List<Vehicle>> GetVehiclesByUserId(string userId)
         {
-            return await _context.Veihicle.Where(v => v.User.Id == userId).ToListAsync();
+            return await _context.Vehicle.Where(v => v.User.Id == userId).ToListAsync();
         }
         public async Task<Vehicle> GetVehicleById(int id)
         {
-            return await _context.Veihicle.FirstOrDefaultAsync(v => v.Id == id);
+            return await _context.Vehicle.FirstOrDefaultAsync(v => v.Id == id);
         }
         public async Task<Vehicle> AddVehicleAsync(Vehicle vehicle)
         {
-            _context.Veihicle.Add(vehicle);
+            _context.Vehicle.Add(vehicle);
             await _context.SaveChangesAsync();
             return vehicle;
         }
         public async Task<Vehicle> DeleteVehicleAsync(int id)
         {
           var vehicle =  GetVehicleById(id).Result;
-            _context.Veihicle.Remove(vehicle);
+            _context.Vehicle.Remove(vehicle);
 
             await _context.SaveChangesAsync();
             return null;

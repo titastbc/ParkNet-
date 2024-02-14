@@ -6,7 +6,7 @@ namespace ParkNet_Cristovao.Machado.Data.Entities
 {
     public class ApplicationDbContext : IdentityDbContext<Customer>
     {
-        public DbSet<Vehicle> Veihicle { get; set; }
+        public DbSet<Vehicle> Vehicle { get; set; }
         public DbSet<Park> Park { get; set; }
         public  DbSet<Floor> Floor { get; set; }
         public DbSet<ParkingSpace> ParkingSpace { get; set; }

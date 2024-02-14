@@ -1,6 +1,8 @@
 ﻿using ParkNet_Cristovao.Machado.Data.Entities;
 using ParkNet_Cristovao.Machado.Data.Repositories;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 
 namespace ParkNet_Cristovao.Machado.Data.Services
@@ -21,31 +23,77 @@ namespace ParkNet_Cristovao.Machado.Data.Services
         }
 
 
-        public List<ParkingSpace> FreePlacesChekcer(List<ParkingSpace> spaces)
+        public List<ParkingSpace> FreePlacesChekcer(List<Floor> floors, Vehicle vehicle)
         {
-            var fullist = new List<Ticket>();
-            var fullist2 = new List<Permit>();
-            List<int> places = new List<int>();
-            foreach (var parkingSpace in spaces)
+            List<ParkingSpace> list = new List<ParkingSpace>();
+            
+            foreach (var floor in floors)
             {
-                fullist.AddRange(_floorRepository._context.Ticket.Where(p => p.ParkingSpaceId == parkingSpace.Id).ToList());
-                fullist2.AddRange(_floorRepository._context.Permit.Where(p => p.ParkingSpaceId > parkingSpace.Id).ToList());
-            }
-            foreach (var t in fullist)
-                places.Add(t.ParkingSpaceId);
-
-            foreach (var t in fullist2)
-                places.Add(t.ParkingSpaceId);
-
-            foreach (var s in spaces)
-                foreach (var p in places)
+                var aux = _floorRepository._context.ParkingSpace.Where(p => p.FloorID == floor.Id).ToList();
+                var count = aux.Count;
+                for (int i = 0; i < count; i++)
                 {
-                    if (s.Id == p)
-                        spaces.Remove(s);
+                    if (aux[i].Type == vehicle.Type)
+                    {
+                        list.Add(aux[i]);
+                    }
+                }
+            }
+            return PermitAndTicketChecker(list);
+        }
+
+        public List<ParkingSpace> PermitAndTicketChecker(List<ParkingSpace> parkingSpaces)
+        {
+            var list = new List<ParkingSpace>(parkingSpaces);
+
+            for (int i = list.Count - 1; i >= 0; i--)
+            {
+                var parkingSpace = list[i];
+                var ticket = _floorRepository._context.Ticket.FirstOrDefault(t => t.ParkingSpaceId == parkingSpace.Id);
+                var permit = _floorRepository._context.Permit.FirstOrDefault(p => p.ParkingSpaceId == parkingSpace.Id);
+
+                if (ticket != null && ticket.StartDate < DateTime.Now && ticket.EndDate > DateTime.Now)
+                {
+                    list.RemoveAt(i);
                 }
 
-            return spaces;
+                if (permit != null && permit.StartDate < DateTime.Now && permit.EndDate > DateTime.Now)
+                {
+                    list.RemoveAt(i);
+                }
+            }
+            return list;
+        }
+        public string[,] MatrizCheked(string[,] matriz, List<ParkingSpace> freeplaces)
+        {
+            var count = freeplaces.Count;
+            for (int i = 0; i < matriz.GetLength(0); i++)
+            {
+                for (int j = 0; j < matriz.GetLength(1); j++)
+                {
+                    if (matriz[i, j] == " " || matriz[i, j] == "\n" || matriz[i,j] == null)
+                        continue;
 
+                    bool foundMatch = false;
+
+                    for (int k = 0; k < count; k++)
+                    {
+                        if (matriz[i, j] == freeplaces[k].Name + " ")
+                        {
+                            matriz[i, j] = freeplaces[k].Name + "      ";
+                            foundMatch = true;
+                            break; 
+                        }
+                    }
+
+                    if (!foundMatch)
+                    {
+                        matriz[i, j] = "X ";
+                    }
+                }
+            }
+
+            return matriz;
         }
     }
 }
