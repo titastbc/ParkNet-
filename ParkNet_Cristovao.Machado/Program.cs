@@ -23,7 +23,9 @@ builder.Services.AddScoped<Checker>();
 builder.Services.AddScoped<TariffPermitRepository>();
 builder.Services.AddScoped<InicialConfigurator>();
 builder.Services.AddScoped<StringHelper>();
-
+builder.Services.AddScoped<TariffTicketRepository>();
+builder.Services.AddScoped<WalletManager>();
+builder.Services.AddScoped<CustomerRepository>();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));

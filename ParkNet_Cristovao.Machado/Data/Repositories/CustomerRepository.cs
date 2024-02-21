@@ -2,13 +2,14 @@
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using System.Linq;
 
 
 namespace ParkNet_Cristovao.Machado.Data.Repositories
 {
     public class CustomerRepository
     {
-        ApplicationDbContext _context;
+       public ApplicationDbContext _context;
         private readonly UserManager<Customer> _userManager;
         public CustomerRepository(ApplicationDbContext context, UserManager<Customer> userManager)
         {
@@ -41,6 +42,12 @@ namespace ParkNet_Cristovao.Machado.Data.Repositories
           await  _userManager.UpdateAsync(customer);
             await _context.SaveChangesAsync();
             return customer;
+        }
+        public string GetCustomerPaymentMethod(string id)
+        {
+            var customer = _context.Users.Where(c => c.Id == id).FirstOrDefault();
+            var method = customer.BankCardNumber;
+            return method;
         }
     }
 }

@@ -42,7 +42,7 @@ namespace ParkNet_Cristovao.Machado.Data.Services
             int count = 0;
             foreach (var line in lines)
             {
-                if (line == "\n ")
+                if (line == "\n " || line == "\n")
                 {
                     count++;
                     list.Add("");
@@ -191,7 +191,6 @@ namespace ParkNet_Cristovao.Machado.Data.Services
            places = _checker.FreePlacesChekcer(Floor, vehicle);
             matriz = PlaceNamer(matriz, floorids);
             matriz = _checker.MatrizCheked(matriz, places);
-
             return matriz;
         }
     }

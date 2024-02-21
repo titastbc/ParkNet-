@@ -1,5 +1,6 @@
 ﻿using ParkNet_Cristovao.Machado.Data.Entities;
 using ParkNet_Cristovao.Machado.Data.Repositories;
+using System.Linq;
 
 namespace ParkNet_Cristovao.Machado.Data.Services
 {
@@ -11,5 +12,17 @@ namespace ParkNet_Cristovao.Machado.Data.Services
             _customerRepository = customerRepository;
         }
         
+
+      public double GetUserBalance(string userid)
+        {
+           var usertransanction = _customerRepository._context.Transactions.Where(x => x.CustomerId == userid);
+            double balance = 0;
+            foreach (var transaction in usertransanction )
+            {   
+                balance += transaction.Value;
+            }
+            return balance;
+        }
     }
 }
+

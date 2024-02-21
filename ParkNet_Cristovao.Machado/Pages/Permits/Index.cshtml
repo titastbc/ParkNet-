@@ -17,7 +17,7 @@
                 @Html.DisplayNameFor(model => model.permits[0].Vehicle.Plate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.permits[0].ParkingSpace.Name)
+                ParkingSpaceName
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.permits[0].EndDate)
@@ -26,20 +26,20 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.permits) {
+@foreach (var item in Model._PermitShareModel) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.VehicleId)
+                @Html.DisplayFor(modelItem => item.Plate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ParkingSpaceId)
+                @Html.DisplayFor(modelItem => item.ParkingSpaceName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.EndDate)
             </td>
             <td>
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-page="./Details" asp-route-id="@item.PermitId">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.PermitId">Delete</a>
             </td>
         </tr>
 }

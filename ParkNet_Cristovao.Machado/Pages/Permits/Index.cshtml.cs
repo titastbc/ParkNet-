@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -19,12 +21,29 @@ namespace ParkNet_Cristovao.Machado.Pages.PermitRequest
             _context = context;
         }
 
-        public IList<PermitRequestModel> PermitRequestModel { get;set; } = default!;
-        public List<Permit> permits { get; set; } = default!;
+        public List<Permit> permits { get; set; } = new List<Permit>();
+        public List<PermitShareModel> _PermitShareModel { get; set; } = new List<PermitShareModel>();
         public async Task OnGetAsync()
         {
-            permits = _context.Permit.ToList();
-            PermitRequestModel = await _context.PermitRequestModel.ToListAsync();
+            var userid = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var uservehicles = _context.Vehicle.Where(v => v.UserId == userid).ToList();
+            foreach (var vehicle in uservehicles)
+            {
+                var aux = _context.Permit.Where(p => p.VehicleId == vehicle.Id).ToList();
+                permits.AddRange(aux);
+            }
+            foreach (var permit in permits)
+            {
+                PermitShareModel model = new PermitShareModel
+                {
+                    ParkingSpaceName = await _context.ParkingSpace.Where(x => x.Id == permit.ParkingSpaceId).Select(p => p.Name).FirstOrDefaultAsync(),
+                    Plate = await _context.Vehicle.Where(x => x.Id == permit.VehicleId).Select(p => p.Plate).FirstOrDefaultAsync(),
+                    StartDate = permit.StartDate,
+                    EndDate = permit.EndDate,
+                    PermitId = permit.Id
+                };
+                _PermitShareModel.Add(model);
+            }
         }
     }
 }

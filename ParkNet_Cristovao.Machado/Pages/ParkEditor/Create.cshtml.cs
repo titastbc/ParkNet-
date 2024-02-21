@@ -42,10 +42,7 @@ namespace ParkNet_Cristovao.Machado.Pages.ParkEditor
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    return Page();
-            //}
+
             await _GeneralRepository._parkrepository.AddPark(Park, Layout);
             Floors = _LayoutGestorService.FloorBuilder(Park.Id, Layout);
             await _GeneralRepository._FloorRepository.AddMultiFloorAsync(Floors);

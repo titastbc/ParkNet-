@@ -1,0 +1,37 @@
+﻿@page
+@model ParkNet_Cristovao.Machado.Pages.TariffTicketGestor.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>TariffTicket</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TariffTicket.Inicialperiod)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TariffTicket.Inicialperiod)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TariffTicket.Finalperiod)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TariffTicket.Finalperiod)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TariffTicket.Price)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TariffTicket.Price)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.TariffTicket.Id">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>

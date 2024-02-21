@@ -10,6 +10,7 @@ using ParkNet_Cristovao.Machado.Data;
 using ParkNet_Cristovao.Machado.Data.Entities;
 using ParkNet_Cristovao.Machado.Data.Models;
 using ParkNet_Cristovao.Machado.Data.Repositories;
+using ParkNet_Cristovao.Machado.Data.Services;
 
 namespace ParkNet_Cristovao.Machado.Pages.PermitRequest
 {
@@ -18,17 +19,20 @@ namespace ParkNet_Cristovao.Machado.Pages.PermitRequest
         private readonly ParkNet_Cristovao.Machado.Data.Entities.ApplicationDbContext _context;
         private readonly TariffPermitRepository _tariffPermit;
         private readonly StringHelper stringHelper;
-
-        public CreateModel(ParkNet_Cristovao.Machado.Data.Entities.ApplicationDbContext context, TariffPermitRepository tariffPermit, StringHelper stringHelper)
+        private readonly WalletManager _walletManager;
+        public CreateModel(ParkNet_Cristovao.Machado.Data.Entities.ApplicationDbContext context, TariffPermitRepository tariffPermit
+            , StringHelper stringHelper, WalletManager walletManager)
         {
             _context = context;
             _tariffPermit = tariffPermit;
             this.stringHelper = stringHelper;
+            _walletManager = walletManager;
         }
 
         public IActionResult OnGet()
         {
             var userid = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            userbalance = _walletManager.GetUserBalance(userid);
             var select = stringHelper.PricesAndPeriodsToString();
 
             ViewData["Periods"] = new SelectList(select);
@@ -39,14 +43,17 @@ namespace ParkNet_Cristovao.Machado.Pages.PermitRequest
         }
 
         [BindProperty]
-        public PermitRequestModel PermitRequestModel { get; set; } = default!;
+        public PermitRequestModel _PermitRequestModel { get; set; } = default!;
+        public double userbalance { get; set; }
+        public Transactions transactions { get; set; } = default!;
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
             var userid = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            PermitRequestModel.Userid = userid;
-            _context.PermitRequestModel.Add(PermitRequestModel);
+            _PermitRequestModel.Period = _PermitRequestModel.Period[0].ToString();
+            _PermitRequestModel.Userid = userid;
+            _context.PermitRequestModel.Add(_PermitRequestModel);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./FinalDetails");

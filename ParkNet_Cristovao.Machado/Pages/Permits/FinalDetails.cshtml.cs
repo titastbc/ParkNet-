@@ -19,11 +19,13 @@ namespace ParkNet_Cristovao.Machado.Pages.Permits
         private readonly ParkNet_Cristovao.Machado.Data.Entities.ApplicationDbContext _context;
         private readonly LayoutGestorService _layoutGestorService;
         private readonly Checker _checker;
+        public readonly WalletManager _walletManager;
 
         public FinalDetailsModel(ParkNet_Cristovao.Machado.Data.Entities.ApplicationDbContext context
             , LayoutGestorService layoutGestorService,
-            Checker checker)
+            Checker checker, WalletManager walletManager)
         {
+            _walletManager = walletManager;
             _layoutGestorService = layoutGestorService;
             _context = context;
             _checker = checker;
@@ -32,12 +34,9 @@ namespace ParkNet_Cristovao.Machado.Pages.Permits
         public IActionResult OnGet()
         {
             var userid = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            userbalance = _walletManager.GetUserBalance(userid);
             var data = _context.PermitRequestModel.Where(p => p.Userid == userid).OrderBy(p => p.Id).LastOrDefault();
-            var periodid = _context.PermitRequestModel.Where(p => p.Userid == userid)
-                                                      .OrderBy(p => p.Id)
-                                                      .Select(p => p.Period)
-                                                      .LastOrDefault();
-            Periodid = periodid[0].ToString();
+            Periodid = data.Period;
             Price = _context.TariffPermits.Where(t => t.Id == int.Parse(Periodid))
                 .Select(p => p.Price).FirstOrDefault();
             Vehicle vehicle = _context.Vehicle.Find(data.VehicleId);
@@ -53,10 +52,16 @@ namespace ParkNet_Cristovao.Machado.Pages.Permits
         public string[,] Layout { get; set; } = default!;
         public decimal Price { get; set; }
         public string Periodid { get; set; }
+        public double userbalance { get; set; }
+        public Transactions transactions { get; set; } = default!;
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
+
             var userid = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var data = _context.PermitRequestModel.Where(p => p.Userid == userid).OrderBy(p => p.Id).LastOrDefault();
+            Periodid = data.Period;
+
             var period = _context.TariffPermits.Where(t => t.Id == int.Parse(Periodid))
                 .Select(p => p.Period).FirstOrDefault();
             Permit permit = new Permit();
@@ -69,6 +74,17 @@ namespace ParkNet_Cristovao.Machado.Pages.Permits
                     .LastOrDefault();
                 permit.ParkingSpaceId = Permit.ParkingSpaceId;
             }
+            Price = _context.TariffPermits.Where(t => t.Id == int.Parse(Periodid))
+    .Select(p => p.Price).FirstOrDefault();
+            Transactions transactions = new Transactions();
+            {
+                transactions.Id = Guid.NewGuid().ToString();
+                transactions.CustomerId = userid;
+                transactions.Description = "Permit";
+                transactions.Date = DateTime.Now;
+                transactions.Value = (double)Price * -1;
+            }
+            _context.Transactions.Add(transactions);
             _context.Permit.Add(permit);
             await _context.SaveChangesAsync();
 

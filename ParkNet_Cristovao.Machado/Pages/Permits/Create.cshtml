@@ -9,40 +9,54 @@
 
 <h4>Permit Request</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-<form method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+@if (Model.userbalance <= 0)
+{
+    <p class="text-danger">You dont have enough balance, you can't request a permit</p>
+    <div>
+        <a asp-page="/Wallet/Deposit">Make a deposit</a>
+    </div>
+    <div>
+        <a asp-page="Index">Back to List</a>
+    </div>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-    <div class="form-group">
-        <label asp-for="PermitRequestModel.VehicleId" class="control-label">Choose you vehicle</label>
-        <select asp-for="PermitRequestModel.VehicleId" class="form-control" asp-items="ViewBag.Vehicles"></select>
-        <span asp-validation-for="PermitRequestModel.VehicleId" class="text-danger"></span>
+                <div class="form-group">
+                    <label asp-for="_PermitRequestModel.VehicleId" class="control-label">Choose you vehicle</label>
+                    <select asp-for="_PermitRequestModel.VehicleId" class="form-control" asp-items="ViewBag.Vehicles"></select>
+                    <span asp-validation-for="_PermitRequestModel.VehicleId" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="_PermitRequestModel.Period" class="control-label">Type of subscription</label>
+                    <select asp-for="_PermitRequestModel.Period" class="form-control" asp-items="ViewBag.Periods"></select>
+                    <span asp-validation-for="_PermitRequestModel.Period" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="_PermitRequestModel.Parkid" class="control-label">Choose a Park</label>
+                    <select asp-for="_PermitRequestModel.Parkid" class="form-control" asp-items="ViewBag.Parks"></select>
+                    <span asp-validation-for="_PermitRequestModel.Parkid" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+
+        </div>
     </div>
 
-    <div class="form-group">
-        <label asp-for="PermitRequestModel.Period" class="control-label">Type of subscription</label>
-        <select asp-for="PermitRequestModel.Period" class="form-control" asp-items="ViewBag.Periods"></select>
-        <span asp-validation-for="PermitRequestModel.Period" class="text-danger"></span>
+    <div>
+        <a asp-page="Index">Back to List</a>
     </div>
 
-    <div class="form-group">
-        <label asp-for="PermitRequestModel.Parkid" class="control-label">Choose a Park</label>
-        <select asp-for="PermitRequestModel.Parkid" class="form-control" asp-items="ViewBag.Parks"></select>
-        <span asp-validation-for="PermitRequestModel.Parkid" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <input type="submit" value="Create" class="btn btn-primary" />
-    </div>
-</form>
-
-    </div>
-</div>
-
-<div>
-    <a asp-page="Index">Back to List</a>
-</div>
+}
 
 @section Scripts {
     @{

@@ -52,12 +52,12 @@ namespace ParkNet_Cristovao.Machado.Data.Services
                 var ticket = _floorRepository._context.Ticket.FirstOrDefault(t => t.ParkingSpaceId == parkingSpace.Id);
                 var permit = _floorRepository._context.Permit.FirstOrDefault(p => p.ParkingSpaceId == parkingSpace.Id);
 
-                if (ticket != null && ticket.StartDate < DateTime.Now && ticket.EndDate > DateTime.Now)
+                if (ticket != null || ticket.EndDate > DateTime.Now || ticket.EndDate == null)
                 {
                     list.RemoveAt(i);
                 }
 
-                if (permit != null && permit.StartDate < DateTime.Now && permit.EndDate > DateTime.Now)
+                if (permit != null || permit.EndDate > DateTime.Now || permit.EndDate == null)
                 {
                     list.RemoveAt(i);
                 }

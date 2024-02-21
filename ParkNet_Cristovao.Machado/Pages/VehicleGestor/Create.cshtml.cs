@@ -32,6 +32,7 @@ namespace ParkNet_Cristovao.Machado.Pages.VehicleGestor
                 new SelectListItem { Value = "Car", Text = "Car" },
                 new SelectListItem { Value = "Motorcycle", Text = "Motorcycle" }
             };
+
             return Page();
         }
 
