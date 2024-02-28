@@ -5,11 +5,16 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+
+
+<h1>Balance</h1>
+<p>
+    @Model.userbalance $
 
 <p>
-    <a asp-page="Create">Create New</a>
-</p>
+    <a asp-page="Deposit">New deposit</a>     <a asp-page="Withdraw">Withdraw</a>
+</p> 
+<h2>Transaction History</h2>
 <table class="table">
     <thead>
         <tr>

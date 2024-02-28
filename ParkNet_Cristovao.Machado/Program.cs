@@ -26,6 +26,7 @@ builder.Services.AddScoped<StringHelper>();
 builder.Services.AddScoped<TariffTicketRepository>();
 builder.Services.AddScoped<WalletManager>();
 builder.Services.AddScoped<CustomerRepository>();
+builder.Services.AddScoped<PriceCalculator>();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));

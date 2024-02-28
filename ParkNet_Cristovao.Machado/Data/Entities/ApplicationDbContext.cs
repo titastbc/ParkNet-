@@ -16,6 +16,8 @@ namespace ParkNet_Cristovao.Machado.Data.Entities
         public DbSet<Transactions> Transactions { get; set; }
         public DbSet<Ticket> Ticket { get; set; }
        public DbSet<PermitRequestModel> PermitRequestModel { get; set; }
+        public DbSet<TicketRequestModel> TicketRequestModel { get; set; }
+        
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

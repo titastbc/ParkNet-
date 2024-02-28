@@ -1,0 +1,68 @@
+﻿@page
+@using System.Security.Claims
+@using ParkNet_Cristovao.Machado.Data.Services
+@model ParkNet_Cristovao.Machado.Pages.Wallet.WithDrawModel
+
+@{
+    ViewData["Title"] = "WithDraw";
+var user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+var balance = Model._walletManager.GetUserBalance(user);
+}
+
+<h1>WithDraw</h1>
+@if (balance <= 0)
+{
+    <p class="text-danger">You dont have enough balance, you can't withdraw</p>
+    <div>
+        <a asp-page="Deposit">Make a deposit</a>
+    </div>
+    <div>
+        <a asp-page="Index">Back to List</a>
+    </div>
+}
+else
+{
+
+    <h4>Your Balance</h4>
+    <hr />
+    <dl class="row">
+        <dd class="col-sm-10">
+            @balance $ 
+        </dd>
+    </dl>
+    <h4>Withdraw</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="value" class="control-label">Amount</label>
+                    <div class="input-group">
+                        <input asp-for="value" class="form-control">
+                        <div class="input-group-append">
+                            <span class="input-group-text">$</span>
+                        </div>
+                    </div>
+                    <span asp-validation-for="value" class="text-danger"></span>
+
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-page="Index">Back to List</a>
+    </div>
+}
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

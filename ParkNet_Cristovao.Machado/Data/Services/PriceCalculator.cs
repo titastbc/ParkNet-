@@ -12,9 +12,9 @@ namespace ParkNet_Cristovao.Machado.Data.Services
         {
             _tariffTicket = tariffTicket;
         }
-        public decimal CalculatePrice(Ticket ticket)
+        public decimal CalculatePrice(DateTime startdate)
         {
-            var minutes = (ticket.StartDate - DateTime.Now).TotalMinutes;
+            var minutes = (startdate - DateTime.Now).TotalMinutes;
             var tariffs = _tariffTicket.GetTariffTickets();
             var price = tariffs.Result[0].Price;
             int cout = 0;
@@ -36,7 +36,7 @@ namespace ParkNet_Cristovao.Machado.Data.Services
                 }
             }
             price += ((decimal)RestMinutes * tariffs.Result.Last().Price);
-
+            return price;
         }
     }
 }

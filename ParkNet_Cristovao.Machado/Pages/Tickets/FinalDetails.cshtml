@@ -1,0 +1,70 @@
+﻿@page
+@model ParkNet_Cristovao.Machado.Pages.Tickets.FinalDetailsModel
+
+@{
+    ViewData["Title"] = "FinalDetails";
+}
+
+<h1>FinalDetails</h1>
+
+<h4>Permit</h4>
+@if ((decimal)Model.userbalance < Model.Price)
+{
+    <p>Not enough balance to continue your request!</p>
+    <div>
+        <a asp-page="/Wallet/Deposit">Make a deposit</a>
+    </div>
+    <div>
+        <a asp-page="Index">Back to List</a>
+    </div>
+}
+else
+{
+    <hr />
+    <table border="1">
+        @for (int i = 0; i < Model.Layout.GetLength(0); i++)
+        {
+            <tr>
+                @for (int j = 0; j < Model.Layout.GetLength(1); j++)
+                {
+                    <td>
+                        @if (Model.Layout[i, j] == "X ")
+                        {
+                            <span style="color: red;">@Model.Layout[i, j]</span>
+                        }
+                        else
+                        {
+                            <span style="color: green;">@Model.Layout[i, j]</span>
+
+                        }
+                    </td>
+                }
+            </tr>
+        }
+    </table>
+    <div class="row">
+        <div class="col-md-4">
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Ticket.ParkingSpaceId" class="control-label">Free ParkingSpaces</label>
+                    <select asp-for="Ticket.ParkingSpaceId" class="form-control" asp-items="ViewBag.ParkingSpace"></select>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Assign Ticket" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-page="Index">Back to List</a>
+    </div>
+
+}
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

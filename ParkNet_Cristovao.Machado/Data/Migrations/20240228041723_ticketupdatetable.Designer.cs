@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ParkNet_Cristovao.Machado.Data.Entities;
 
@@ -11,9 +12,11 @@ using ParkNet_Cristovao.Machado.Data.Entities;
 namespace ParkNet_Cristovao.Machado.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240228041723_ticketupdatetable")]
+    partial class ticketupdatetable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -396,13 +399,13 @@ namespace ParkNet_Cristovao.Machado.Data.Migrations
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ParkingSpaceId")
+                    b.Property<int?>("ParkingSpaceId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("VehicleId")
+                    b.Property<int?>("VehicleId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -622,15 +625,11 @@ namespace ParkNet_Cristovao.Machado.Data.Migrations
                 {
                     b.HasOne("ParkNet_Cristovao.Machado.Data.Entities.ParkingSpace", "ParkingSpace")
                         .WithMany()
-                        .HasForeignKey("ParkingSpaceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ParkingSpaceId");
 
                     b.HasOne("ParkNet_Cristovao.Machado.Data.Entities.Vehicle", "Vehicle")
                         .WithMany()
-                        .HasForeignKey("VehicleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("VehicleId");
 
                     b.Navigation("ParkingSpace");
 

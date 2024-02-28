@@ -29,13 +29,13 @@
 @foreach (var item in Model.TariffTicket) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Inicialperiod)
+                @Html.DisplayFor(modelItem => item.Inicialperiod) Min
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Finalperiod)
+                @Html.DisplayFor(modelItem => item.Finalperiod) Min
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Price)
+                @Html.DisplayFor(modelItem => item.Price)$
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
