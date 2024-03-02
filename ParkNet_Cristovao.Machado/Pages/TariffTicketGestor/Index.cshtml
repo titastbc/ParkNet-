@@ -7,9 +7,21 @@
 
 <h1>Index</h1>
 
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
+@if(Model.DailyTicket.Count == 0)
+{
+    <p class="text-danger">You didnt set a price for the daily ticket yet</p>
+    <div>
+        <a asp-page="CreateDailyTicket">Set now</a>
+    </div>
+}
+else if ( Model.DailyTicket.Count == 1)
+{
+    <p class="text-success">You already have a price for the daily ticket, click on the button to edit the price</p>
+    <p>Current price is @Model.DailyTicket[0].Price</p>
+    <div>
+        <a asp-page="EditDailyTicket">Edit</a>
+    </div>
+})
 <table class="table">
     <thead>
         <tr>

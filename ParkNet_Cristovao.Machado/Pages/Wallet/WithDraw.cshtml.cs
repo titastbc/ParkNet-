@@ -16,23 +16,29 @@ namespace ParkNet_Cristovao.Machado.Pages.Wallet
     {
         private readonly ParkNet_Cristovao.Machado.Data.Entities.ApplicationDbContext _context;
         public readonly WalletManager _walletManager;
+        public readonly Checker _checker;
 
         public WithDrawModel(ParkNet_Cristovao.Machado.Data.Entities.ApplicationDbContext context
-            , WalletManager walletManager)
+            , WalletManager walletManager,
+Checker checker)
         {
             _context = context;
             _walletManager = walletManager;
+            _checker = checker;
         }
 
         public IActionResult OnGet()
         {
             ViewData["CustomerId"] = new SelectList(_context.Users, "Id", "Id");
+            var userid = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            HasTicket = _checker.ActiveTicketCheker(userid);
             return Page();
         }
 
         [BindProperty]
         public double value { get; set; }
         public double userbalance { get; set; }
+        public bool HasTicket { get; set; }
         public async Task<IActionResult> OnPostAsync()
         {
             var userid = User.FindFirst(ClaimTypes.NameIdentifier).Value;

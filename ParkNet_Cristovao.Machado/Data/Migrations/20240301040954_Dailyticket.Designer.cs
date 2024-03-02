@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ParkNet_Cristovao.Machado.Data.Entities;
 
@@ -11,9 +12,11 @@ using ParkNet_Cristovao.Machado.Data.Entities;
 namespace ParkNet_Cristovao.Machado.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240301040954_Dailyticket")]
+    partial class Dailyticket
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -412,9 +415,6 @@ namespace ParkNet_Cristovao.Machado.Data.Migrations
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsDaily")
-                        .HasColumnType("bit");
-
                     b.Property<int>("ParkingSpaceId")
                         .HasColumnType("int");
 
@@ -526,9 +526,6 @@ namespace ParkNet_Cristovao.Machado.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("IsDaily")
-                        .HasColumnType("bit");
 
                     b.Property<int>("Parkid")
                         .HasColumnType("int");

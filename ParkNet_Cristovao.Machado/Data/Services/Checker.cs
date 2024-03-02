@@ -111,5 +111,19 @@ namespace ParkNet_Cristovao.Machado.Data.Services
 
             return matriz;
         }
+        public bool ActiveTicketCheker(string userid)
+        {
+            var vehicles = _vehicleRepository.GetVehiclesByUserId(userid).Result;
+            foreach (var vehicle in vehicles)
+            {
+                var ticket = _floorRepository._context.Ticket
+                    .Where(p => p.VehicleId == vehicle.Id).OrderBy(v => v.Id).LastOrDefault();
+                if (ticket != null && ticket.EndDate > DateTime.Now)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

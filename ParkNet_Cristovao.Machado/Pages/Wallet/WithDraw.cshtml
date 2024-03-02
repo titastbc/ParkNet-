@@ -20,6 +20,13 @@ var balance = Model._walletManager.GetUserBalance(user);
         <a asp-page="Index">Back to List</a>
     </div>
 }
+else if(Model.HasTicket == true)
+{
+    <p class="text-danger">You have an active ticket, you can't withdraw</p>
+    <div>
+        <a asp-page="Index">Back to List</a>
+    </div>
+}
 else
 {
 

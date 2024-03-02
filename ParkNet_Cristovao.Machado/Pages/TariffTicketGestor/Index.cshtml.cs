@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -20,9 +21,12 @@ namespace ParkNet_Cristovao.Machado.Pages.TariffTicketGestor
 
         public IList<TariffTicket> TariffTicket { get;set; } = default!;
 
+        public IList<DailyTicketTariff> DailyTicket { get;set; } = default!;
+
         public async Task OnGetAsync()
         {
             TariffTicket = await _context.TariffTickets.ToListAsync();
+            DailyTicket = await _context.DailyTicketTariff.ToListAsync();
         }
     }
 }

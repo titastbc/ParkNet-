@@ -22,7 +22,7 @@ namespace ParkNet_Cristovao.Machado.Data.Services
                 balance += transaction.Value;
             }
             return balance;
-        }
+         }
     }
 }
 

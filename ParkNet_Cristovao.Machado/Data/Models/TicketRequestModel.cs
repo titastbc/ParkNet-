@@ -9,5 +9,6 @@ namespace ParkNet_Cristovao.Machado.Data.Models
         public DateTime StartDate { get; set; }
         public int Parkid { get; set; }
         public string Userid { get; set; }
+        public bool IsDaily { get; set; }
     }
 }

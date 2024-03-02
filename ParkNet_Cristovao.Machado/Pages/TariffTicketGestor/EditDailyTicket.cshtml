@@ -1,0 +1,35 @@
+﻿@page
+@model ParkNet_Cristovao.Machado.Pages.TariffTicketGestor.EditDailyTicketModel
+
+@{
+    ViewData["Title"] = "EditDailyTicket";
+}
+
+<h1>EditDailyTicket</h1>
+
+<h4>DailyTicketTariff</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="DailyTicketTariff.Id" />
+            <div class="form-group">
+                <label asp-for="DailyTicketTariff.Price" class="control-label">New Price</label>
+                <input asp-for="DailyTicketTariff.Price" class="form-control" />
+                <span asp-validation-for="DailyTicketTariff.Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

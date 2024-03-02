@@ -34,12 +34,17 @@ namespace ParkNet_Cristovao.Machado.Pages.Tickets
 
         public IActionResult OnGet()
         {
+
             var userid = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             _TicketRequestModel = _context.TicketRequestModel
                 .Where(p => p.Userid == userid).OrderBy(p => p.Id).LastOrDefault();
             Vehicle vehicle = _context.Vehicle
                 .Find(_TicketRequestModel.VehicleId);
             userbalance = _walletManager.GetUserBalance(userid);
+            if (_TicketRequestModel.IsDaily == true)
+            {
+                Price = _PriceCalculator.CalculateDailyPrice(userid);
+            }
             Layout = _layoutGestorService.LayouFromBdWithFreeSpaces(_TicketRequestModel.Parkid, vehicle);
             List<ParkingSpace> Freespaces = _checker.FreePlacesChekcer(_context.Floor
                 .Where(f => f.ParkId == _TicketRequestModel.Parkid).ToList(), vehicle);
@@ -67,12 +72,25 @@ namespace ParkNet_Cristovao.Machado.Pages.Tickets
                 .Find(_TicketRequestModel.VehicleId);
             try
             {
-                Ticket ticket = new Ticket
+                Ticket ticket = new Ticket();
+                if(_TicketRequestModel.IsDaily == true)
+                {
+                    ticket = new Ticket
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        VehicleId = _TicketRequestModel.VehicleId,
+                        ParkingSpaceId = Ticket.ParkingSpaceId,
+                        StartDate = _TicketRequestModel.StartDate,
+                        IsDaily = true
+                    };
+                }
+                ticket = new Ticket()
                 {
                     Id = Guid.NewGuid().ToString(),
                     VehicleId = _TicketRequestModel.VehicleId,
                     ParkingSpaceId = Ticket.ParkingSpaceId,
                     StartDate = _TicketRequestModel.StartDate,
+                    IsDaily = false
                 };
 
                 _context.Ticket.Add(ticket);
@@ -82,6 +100,10 @@ namespace ParkNet_Cristovao.Machado.Pages.Tickets
             {
                 Console.WriteLine($"Erro ao inserir o ticket: {ex.Message}");
                 // Trate a exceção conforme necessário
+            }
+            if (_TicketRequestModel.IsDaily == true)
+            {
+                return RedirectToPage("./CloseTicket");
             }
             return RedirectToPage("./Index");
         }

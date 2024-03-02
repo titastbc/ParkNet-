@@ -28,6 +28,8 @@ namespace ParkNet_Cristovao.Machado.Pages.Tickets
         {
             var userid = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             Balance = _walletManager.GetUserBalance(userid);
+            string[] values = { "Daily", "Normal"};
+            ViewData["Values"] = new SelectList(values.ToList());
             ViewData["Vehicles"] = new SelectList(_context.Vehicle.Where(v => v.UserId == userid), "Id", "Plate");
             ViewData["Parks"] = new SelectList(_context.Park.ToList(), "Id", "Name");
             return Page();
@@ -35,6 +37,7 @@ namespace ParkNet_Cristovao.Machado.Pages.Tickets
 
         [BindProperty]
         public TicketRequestModel TicketRequestModel { get; set; } = default!;
+        public string types { get; set; }
         public double Balance { get; set; }
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
@@ -47,7 +50,14 @@ namespace ParkNet_Cristovao.Machado.Pages.Tickets
             var userid = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             TicketRequestModel.Userid = userid;
             TicketRequestModel.StartDate = DateTime.Now;
-
+            if(types == "Daily")
+            {
+                TicketRequestModel.IsDaily = true;
+            }
+            else
+            {
+                TicketRequestModel.IsDaily = false;
+            }
             _context.TicketRequestModel.Add(TicketRequestModel);
             await _context.SaveChangesAsync();
 
