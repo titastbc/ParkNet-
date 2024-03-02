@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using ParkNet_Cristovao.Machado.Data.Entities;
@@ -8,6 +9,7 @@ using System.Collections.Generic;
 
 namespace ParkNet_Cristovao.Machado.Pages.Stats
 {
+        [Authorize(Roles = "Admin")]
     public class IndexModel : PageModel
     {
         public Customer Customer { get; set; }

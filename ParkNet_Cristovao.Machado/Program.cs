@@ -76,10 +76,15 @@ using(var scope = app.Services.CreateScope())
 
     var usermanager = scope.ServiceProvider.GetRequiredService<UserManager<Customer>>();
     string email = "Admin@gmail.com";
-    string password = "Admin123";
+    string password = "Admin_pass12345";
     if (await usermanager.FindByEmailAsync(email) == null)
     {
-        var user = new Customer { UserName = "Admin", Email = email, EmailConfirmed = true };
+        var user = new Customer { UserName = email, Email = email, EmailConfirmed = true,
+        BankCardNumber = "1234567891234567", DriverLicenseNumber = "1234567890", CC = "87654321"};
+        if(user.Id == null)
+        {
+            user.Id = Guid.NewGuid().ToString();
+        }
         var result = await usermanager.CreateAsync(user, password);
 
        await usermanager.AddToRoleAsync(user, "Admin");

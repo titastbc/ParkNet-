@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using ParkNet_Cristovao.Machado.Data.Entities;
@@ -6,6 +7,7 @@ using System;
 
 namespace ParkNet_Cristovao.Machado.Pages.Stats
 {
+    [Authorize(Roles = "Admin")]
     public class ProfittModel : PageModel
     {
         private readonly ApplicationDbContext _context;
