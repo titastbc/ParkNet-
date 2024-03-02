@@ -10,7 +10,6 @@
             <th>Id</th>
             <th>Email</th>
             <th>Balance</th>
-            <!-- Adicione mais colunas conforme necessário -->
         </tr>
     </thead>
     <tbody>
@@ -20,7 +19,6 @@
                 <td>@customer.Id</td>
                 <td>@customer.Email</td>
                 <td>@Math.Round(Model.WalletManager.GetUserBalance(customer.Id), 2)$</td>
-                <!-- Adicione mais colunas conforme necessário -->
             </tr>
         }
     </tbody>

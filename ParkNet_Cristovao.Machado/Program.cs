@@ -1,5 +1,6 @@
 
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,6 +34,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<Customer>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddRazorPages();
 
@@ -58,5 +60,30 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapRazorPages();
+
+using(var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+    var roles = new[] { "Admin", "Customer" };
+    foreach (var role in roles)
+    {
+        if (! await roleManager.RoleExistsAsync(role))
+        {
+            await roleManager.CreateAsync(new IdentityRole(role));
+        }
+    }
+
+    var usermanager = scope.ServiceProvider.GetRequiredService<UserManager<Customer>>();
+    string email = "Admin@gmail.com";
+    string password = "Admin123";
+    if (await usermanager.FindByEmailAsync(email) == null)
+    {
+        var user = new Customer { UserName = "Admin", Email = email, EmailConfirmed = true };
+        var result = await usermanager.CreateAsync(user, password);
+
+       await usermanager.AddToRoleAsync(user, "Admin");
+    }
+}
 
 app.Run();
