@@ -16,9 +16,9 @@ namespace ParkNet_Cristovao.Machado.Data.Services
         private TicketRequestModel _ticketRequestModel;
         public PriceCalculator(TariffTicketRepository tariffTicket, ApplicationDbContext context)
         {
+            _context = context;
             _ticketRequestModel = _context.TicketRequestModel
                 .OrderBy(p => p.Id).LastOrDefault();
-            _context = context;
             _tariffTicket = tariffTicket;
             _dailyTicketTariff = _context.DailyTicketTariff.FirstOrDefault();
         }
@@ -35,7 +35,7 @@ namespace ParkNet_Cristovao.Machado.Data.Services
                     continue;
                 if (tariffs.Result.Last() == tariff)
                     price += ((decimal)RestMinutes / 15) * tariffs.Result.Last().Price;
-                if (minutes >= tariff.Finalperiod )
+                if (minutes >= tariff.Finalperiod)
                 {
                     price += tariff.Price;
                     RestMinutes -= (double)tariff.Finalperiod;
@@ -52,13 +52,36 @@ namespace ParkNet_Cristovao.Machado.Data.Services
         {
             return _dailyTicketTariff.Price;
         }
-        public decimal Profitt()
+        public decimal Profitt(int nummounths)
         {
-            var Ticketprofitt = _context.Transactions.Where(p => p.Description == "Ticket").ToList();
-            var Permitprofitt = _context.Transactions.Where(p => p.Description == "Permit").ToList();
-            var total = Ticketprofitt.Sum(p => p.Value) + Permitprofitt.Sum(p => p.Value);
-            
-            
+            DateTime firstday = new DateTime();
+            DateTime lastday = new DateTime();
+            if(DateTime.Now.Month - nummounths < 0)
+            {
+                nummounths = 12 - nummounths;
+                if(nummounths == 0)
+                    firstday = new DateTime(DateTime.Now.Year - 1, DateTime.Now.Month, 1);
+                else
+                firstday = new DateTime(DateTime.Now.Year - 1, nummounths, 1);
+                lastday = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+            }
+            else if (DateTime.Now.Month - nummounths == 0)
+            {
+                firstday = new DateTime(DateTime.Now.Year - 1, 12, 1);
+                lastday = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+            }
+            else
+            {
+                firstday = new DateTime(DateTime.Now.Year, DateTime.Now.Month - nummounths, 1);
+                lastday = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+            }
+            var total = (decimal)_context.Transactions
+                .Where(p => (p.Description == "Ticket"
+                || p.Description == "Permit") &&
+                p.Date >= firstday && p.Date <= lastday)
+                .Sum(p => p.Value);
+            return Math.Abs(total);
+
         }
     }
 }

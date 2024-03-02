@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using System.Linq;
+using System.Collections.Generic;
 
 
 namespace ParkNet_Cristovao.Machado.Data.Repositories
@@ -49,5 +50,14 @@ namespace ParkNet_Cristovao.Machado.Data.Repositories
             var method = customer.BankCardNumber;
             return method;
         }
+        public async Task<Customer> GetCustomerByEmail(string email)
+        {
+            return await _userManager.FindByEmailAsync(email);
+        }
+        public List<Customer> GetCustomers()
+        {
+            return _context.Users.ToList();
+        }
+
     }
 }

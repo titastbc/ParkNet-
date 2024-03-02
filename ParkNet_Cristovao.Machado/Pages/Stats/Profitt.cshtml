@@ -1,0 +1,90 @@
+﻿@page
+@model ParkNet_Cristovao.Machado.Pages.Stats.ProfittModel
+@{
+}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultado do Cálculo de Lucro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 20px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 50%;
+            margin: 20px auto;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        h2 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h2>Here´s our proffit stats!</h2>
+
+    <table>
+        @for (int i = 0; i < Model.numounths.Length; i++)
+        {
+            if (Model.numounths[i] == 1)
+            {
+                <tr>
+                    <td>Stats from the last Mounth </td>
+                    <td>@Math.Round(Model.ProfittValues[1], 2)$</td>
+                </tr>
+
+            }
+            else
+            {
+                <tr>
+                    <td>Stats from the last @Model.numounths[i] Mouths </td>
+                    <td>@Math.Round(Model.ProfittValues[1], 2)$</td>
+                </tr>
+
+            }
+        }
+    </table>
+</body>
+</html>
+
+
+
+
+
+
+@* <tr>
+    <th>Período (meses)</th>
+    <th>Lucro</th>
+</tr>
+<tr>
+    <td>1</td>
+    <td><%= ProfittValues[1] %></td>
+</tr>
+<tr>
+    <td>3</td>
+    <td><%= ProfittValues[3] %></td>
+</tr>
+<tr>
+    <td>6</td>
+    <td><%= ProfittValues[6] %></td>
+</tr>
+<tr>
+    <td>12</td>
+    <td><%= ProfittValues[12] %></td>
+</tr> *@
