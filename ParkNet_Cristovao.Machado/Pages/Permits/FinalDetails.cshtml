@@ -30,7 +30,13 @@ else
                     <td>
                         @if (Model.Layout[i, j] == "X ")
                         {
-                            <span style="color: red;">@Model.Layout[i, j]</span>
+@*                             <span style="color: red;">@Model.Layout[i, j]</span> *@
+                            <img src="~/Ocuppied-.png" alt="Logo" width="20" height="20">
+
+                        }
+                        else if (Model.Layout[i, j] == " " || Model.Layout[i, j] == "\n" || Model.Layout[i, j] == null)
+                        {
+                            <span style="color: green;">@Model.Layout[i, j]</span>
                         }
                         else
                         {

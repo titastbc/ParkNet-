@@ -1,5 +1,6 @@
 ﻿
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using ParkNet_Cristovao.Machado.Data.Entities;
@@ -7,6 +8,7 @@ using ParkNet_Cristovao.Machado.Data.Repositories;
 
 namespace ParkNet_Cristovao.Machado.Pages.VehicleGestor
 {
+    [Authorize]
     public class DeleteModel : PageModel
     {
         private readonly VehicleRepository _vehicleRepository;

@@ -118,7 +118,12 @@ namespace ParkNet_Cristovao.Machado.Data.Services
             {
                 var ticket = _floorRepository._context.Ticket
                     .Where(p => p.VehicleId == vehicle.Id).OrderBy(v => v.Id).LastOrDefault();
-                if (ticket != null && ticket.EndDate > DateTime.Now)
+                if (ticket == null)
+                {
+                    return false;
+                }
+                else
+                if ((ticket.EndDate > DateTime.Now || ticket.EndDate == null) && ticket != null)
                 {
                     return true;
                 }

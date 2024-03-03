@@ -12,6 +12,7 @@ using ParkNet_Cristovao.Machado.Data.Models;
 
 namespace ParkNet_Cristovao.Machado.Pages.PermitRequest
 {
+    [Authorize]
     public class IndexModel : PageModel
     {
         private readonly ParkNet_Cristovao.Machado.Data.Entities.ApplicationDbContext _context;

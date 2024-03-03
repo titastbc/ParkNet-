@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -14,6 +15,7 @@ using ParkNet_Cristovao.Machado.Data.Services;
 
 namespace ParkNet_Cristovao.Machado.Pages.Permits
 {
+    [Authorize]
     public class FinalDetailsModel : PageModel
     {
         private readonly ParkNet_Cristovao.Machado.Data.Entities.ApplicationDbContext _context;
@@ -40,6 +42,7 @@ namespace ParkNet_Cristovao.Machado.Pages.Permits
             Price = _context.TariffPermits.Where(t => t.Id == int.Parse(Periodid))
                 .Select(p => p.Price).FirstOrDefault();
             Vehicle vehicle = _context.Vehicle.Find(data.VehicleId);
+            type = vehicle.Type;
             Layout = _layoutGestorService.LayouFromBdWithFreeSpaces(data.Parkid, vehicle);
             List<ParkingSpace> Freespaces = _checker.FreePlacesChekcer(_context.Floor.Where(f => f.ParkId == data.Parkid).ToList(), vehicle);
             ViewData["ParkingSpace"] = new SelectList(Freespaces, "Id", "Name");
@@ -53,6 +56,7 @@ namespace ParkNet_Cristovao.Machado.Pages.Permits
         public decimal Price { get; set; }
         public string Periodid { get; set; }
         public double userbalance { get; set; }
+        public string type { get; set; }
         public Transactions transactions { get; set; } = default!;
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()

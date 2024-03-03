@@ -4,20 +4,17 @@
     ViewData["Title"] = "Home page";
 }
 
+<style>
+    .imagem-centralizada {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
 
-@if(Model.Parks.Count < 1)
-{
-    <div class="text-center">
-        <h1 class="display-4">Welcome, Admin! Please Config a Park! </h1>
-    </div>
-    <div>
-        <a asp-page="/ParkEditor/Create">ParkCreator</a>
-    </div>
-    
-}
-else {
     <div class="text-center">
         <h1 class="display-4">ParkNet</h1>
     </div>
-}
+
+<img src="~/ParkNetLogo.png" alt="Logo" class="imagem-centralizada" width="600" height="600">
 
