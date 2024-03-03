@@ -1,25 +1,49 @@
 ﻿@page
 @model ParkNet_Cristovao.Machado.Pages.Stats.IndexModel
 @{
-    
+
 }
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Email</th>
-            <th>Balance</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var customer in Model.Customers)
-        {
+<h1>UserInfo</h1>
+
+<div>
+    <a asp-page="Profitt">Check our profitt here</a>
+</div>
+
+@if (Model.Customers.Count == 0)
+{
+    <p class="text-danger">No customers Registered yet!</p>
+}
+
+else
+{
+
+    <table class="table">
+        <thead>
             <tr>
-                <td>@customer.Id</td>
-                <td>@customer.Email</td>
-                <td>@Math.Round(Model.WalletManager.GetUserBalance(customer.Id), 2)$</td>
+                <th>Id</th>
+                <th>Email</th>
+                <th>Balance</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var customer in Model.Customers)
+            {
+                if (customer.Email == "Admin@gmail.com")
+                {
+                    continue;
+                }
+                <tr>
+                    <td>@customer.Id</td>
+                    <td>@customer.Email</td>
+                    <td>@Math.Round(Model.WalletManager.GetUserBalance(customer.Id), 2)$</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+

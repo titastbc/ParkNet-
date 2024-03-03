@@ -16,10 +16,12 @@ namespace ParkNet_Cristovao.Machado.Pages.Tickets
     {
         private readonly ParkNet_Cristovao.Machado.Data.Entities.ApplicationDbContext _context;
         private readonly WalletManager _walletManager;
+        private readonly Checker checker;
 
         public CreateModel(ParkNet_Cristovao.Machado.Data.Entities.ApplicationDbContext context,
-            WalletManager walletManager)
+            WalletManager walletManager, Checker checker)
         {
+            this.checker = checker;
             _walletManager = walletManager;
             _context = context;
         }
@@ -27,6 +29,7 @@ namespace ParkNet_Cristovao.Machado.Pages.Tickets
         public IActionResult OnGet()
         {
             var userid = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            HasTicket = checker.ActiveTicketCheker(userid);
             Balance = _walletManager.GetUserBalance(userid);
             string[] values = { "Daily", "Normal"};
             ViewData["Values"] = new SelectList(values.ToList());
@@ -37,8 +40,11 @@ namespace ParkNet_Cristovao.Machado.Pages.Tickets
 
         [BindProperty]
         public TicketRequestModel TicketRequestModel { get; set; } = default!;
+        [BindProperty]
         public string types { get; set; }
         public double Balance { get; set; }
+
+        public bool HasTicket { get; set; }
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()

@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ParkNet_Cristovao.Machado.Data;
 using ParkNet_Cristovao.Machado.Data.Entities;
+using ParkNet_Cristovao.Machado.Data.Models;
 using ParkNet_Cristovao.Machado.Data.Repositories;
 using ParkNet_Cristovao.Machado.Data.Services;
 using System;
@@ -28,6 +29,7 @@ builder.Services.AddScoped<TariffTicketRepository>();
 builder.Services.AddScoped<WalletManager>();
 builder.Services.AddScoped<CustomerRepository>();
 builder.Services.AddScoped<PriceCalculator>();
+builder.Services.AddScoped<TicketRequestModel>();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));

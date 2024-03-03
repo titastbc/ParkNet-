@@ -26,10 +26,10 @@ namespace ParkNet_Cristovao.Machado.Pages.TariffTicketGestor
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            //if (id == null)
+            //{
+            //    return NotFound();
+            //}
 
             var dailytickettariff = await _context.DailyTicketTariff.FirstAsync(m => m.Id == 1);
             DailyTicketTariff = dailytickettariff;

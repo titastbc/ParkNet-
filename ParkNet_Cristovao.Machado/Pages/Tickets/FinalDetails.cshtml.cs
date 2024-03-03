@@ -73,7 +73,7 @@ namespace ParkNet_Cristovao.Machado.Pages.Tickets
             try
             {
                 Ticket ticket = new Ticket();
-                if(_TicketRequestModel.IsDaily == true)
+                if (_TicketRequestModel.IsDaily == true)
                 {
                     ticket = new Ticket
                     {
@@ -84,14 +84,18 @@ namespace ParkNet_Cristovao.Machado.Pages.Tickets
                         IsDaily = true
                     };
                 }
-                ticket = new Ticket()
+                else
                 {
-                    Id = Guid.NewGuid().ToString(),
-                    VehicleId = _TicketRequestModel.VehicleId,
-                    ParkingSpaceId = Ticket.ParkingSpaceId,
-                    StartDate = _TicketRequestModel.StartDate,
-                    IsDaily = false
-                };
+
+                    ticket = new Ticket()
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        VehicleId = _TicketRequestModel.VehicleId,
+                        ParkingSpaceId = Ticket.ParkingSpaceId,
+                        StartDate = _TicketRequestModel.StartDate,
+                        IsDaily = false
+                    };
+                }
 
                 _context.Ticket.Add(ticket);
                 await _context.SaveChangesAsync();

@@ -5,23 +5,30 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+@* <h1>TariffTickets</h1>
 
 @if(Model.DailyTicket.Count == 0)
 {
     <p class="text-danger">You didnt set a price for the daily ticket yet</p>
     <div>
-        <a asp-page="CreateDailyTicket">Set now</a>
+        <a asp-page="CreateDailyTicket">Set DailyTicket Price</a>
     </div>
 }
 else if ( Model.DailyTicket.Count == 1)
 {
     <p class="text-success">You already have a price for the daily ticket, click on the button to edit the price</p>
-    <p>Current price is @Model.DailyTicket[0].Price</p>
     <div>
-        <a asp-page="EditDailyTicket">Edit</a>
+        <a asp-page="EditDailyTicket">EditPrice</a>
     </div>
-})
+    <p>Current daily ticket price is @Model.DailyTicket[0].Price</p>
+}
+
+<h4>New Tariff</h4>
+<div>
+    <a asp-page="Create">CreateNewTariff</a>
+</div>
+
+<h5>Curret Tariffs</h5>
 <table class="table">
     <thead>
         <tr>
@@ -58,3 +65,69 @@ else if ( Model.DailyTicket.Count == 1)
 }
     </tbody>
 </table>
+ *@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>TariffTickets</title>
+</head>
+<body>
+
+    <div class="container mt-5">
+        @if (Model.DailyTicket.Count == 0)
+        {
+            <div class="alert alert-danger">
+                You haven't set a price for the daily ticket yet.
+                <a asp-page="CreateDailyTicket" class="alert-link">Set Daily Ticket Price</a>
+            </div>
+        }
+        else if (Model.DailyTicket.Count == 1)
+        {
+            <div class="alert alert-success">
+                You already have a price for the daily ticket.
+            </div>
+                <a asp-page="EditDailyTicket" class="alert-link">Edit Price</a>
+            <p>Current daily ticket price is $@Model.DailyTicket[0].Price</p>
+        }
+
+        <h4 class="mt-4">New Tariff</h4>
+        <div>
+            <a asp-page="Create" class="btn btn-primary">Create New Tariff</a>
+        </div>
+
+        <h5 class="mt-4">Current Tariffs</h5>
+        <table class="table table-bordered mt-2">
+            <thead class="thead-dark">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.TariffTicket[0].Inicialperiod)</th>
+                    <th>@Html.DisplayNameFor(model => model.TariffTicket[0].Finalperiod)</th>
+                    <th>@Html.DisplayNameFor(model => model.TariffTicket[0].Price)</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.TariffTicket)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Inicialperiod) Min</td>
+                        <td>@Html.DisplayFor(modelItem => item.Finalperiod) Min</td>
+                        <td>@Html.DisplayFor(modelItem => item.Price)$</td>
+                        <td>
+                            <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a>
+                            <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-sm btn-info ml-1">Details</a>
+                            <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger ml-1">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

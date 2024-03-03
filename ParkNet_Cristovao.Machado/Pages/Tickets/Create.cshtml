@@ -7,6 +7,13 @@
 
 <h4>Permit Request</h4>
 <hr />
+@if(Model.HasTicket == true)
+{
+    <p class="text-danger">You already have a ticket</p>
+    <div>
+        <a asp-page="Index">Back to List</a>
+    </div>
+}
 @if (Model.Balance <= 0)
 {
     <p class="text-danger">You dont have enough balance, you can't request a permit</p>

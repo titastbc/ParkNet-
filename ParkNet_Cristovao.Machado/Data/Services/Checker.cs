@@ -125,5 +125,19 @@ namespace ParkNet_Cristovao.Machado.Data.Services
             }
             return false;
         }
+        public bool ActivePermitChecker(string userid)
+        {
+            var vehicles = _vehicleRepository.GetVehiclesByUserId(userid).Result;
+            foreach (var vehicle in vehicles)
+            {
+                var permit = _floorRepository._context.Permit
+                    .Where(p => p.VehicleId == vehicle.Id).OrderBy(v => v.Id).LastOrDefault();
+                if (permit != null && permit.EndDate > DateTime.Now)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }
